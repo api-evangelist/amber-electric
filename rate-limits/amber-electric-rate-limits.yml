@@ -1,0 +1,69 @@
+generated: '2026-07-27'
+method: searched
+source: https://github.com/amberelectric/public-api/discussions/146
+docs: https://app.amber.com.au/developers/documentation
+note: >-
+  Amber announced rate limiting in its own public API repository on 2023-06-27
+  in a post by the Amber engineer who maintains the contract, and the limit was
+  stated verbatim as "a limit of 50 calls per 5-minutes (reset every 5-minutes)"
+  with the clarification that "API limits are per account, not per site, or per
+  API key". The announcement was a monitoring-first rollout; enforcement is
+  confirmed in the wild by issue #277 (2026-02-24), where a developer reports
+  repeated too-many-requests responses. The signalling side is contractual
+  rather than reported: the published OpenAPI declares RateLimit-Limit,
+  RateLimit-Remaining, RateLimit-Reset and RateLimit-Policy response headers on
+  the 200 of all five operations, referencing
+  draft-ietf-httpapi-ratelimit-headers.
+rate_limits:
+- name: Account-wide request limit
+  applies_to: all operations on https://api.amber.com.au/v1
+  limit_count: 50
+  interval: 5
+  interval_unit: minutes
+  scope: account
+  scope_note: Per Amber account — not per site and not per API key.
+  reset: fixed 5-minute window
+  source: https://github.com/amberelectric/public-api/discussions/146
+headers:
+- name: RateLimit-Limit
+  description: The number of requests allowed per rate limit window
+  source: openapi/amber-electric-public-api-openapi.json#/components/headers/RateLimit-Limit
+- name: RateLimit-Remaining
+  description: The remaining quota in the current rate limit window
+  source: openapi/amber-electric-public-api-openapi.json#/components/headers/RateLimit-Remaining
+- name: RateLimit-Reset
+  description: The number of seconds until the rate limit window resets
+  source: openapi/amber-electric-public-api-openapi.json#/components/headers/RateLimit-Reset
+- name: RateLimit-Policy
+  description: The rate limit policy
+  source: openapi/amber-electric-public-api-openapi.json#/components/headers/RateLimit-Policy
+standard: draft-ietf-httpapi-ratelimit-headers
+standard_url: https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/
+headers_observed:
+  request: GET https://api.amber.com.au/v1/state/nsw/renewables/current
+  auth: none
+  status: 200
+  captured: '2026-07-27'
+  ratelimit_headers_present: false
+  note: >-
+    The declared RateLimit-* headers were NOT returned on the anonymous
+    renewables operation. Recorded as observed — the headers may only be emitted
+    on token-authenticated calls, which is consistent with the limit being
+    account-scoped, but that is inference and is not asserted.
+exceeded:
+  status: 429
+  status_evidence: >-
+    Not declared in the OpenAPI — the spec documents no 429 response on any
+    operation. Recorded from developer reports of "too many requests" responses
+    in https://github.com/amberelectric/public-api/issues/277. The undeclared
+    429 is a real gap between the contract and the running service.
+  reported_behaviour: >-
+    Reported by a developer (not confirmed by Amber): once the limit is hit the
+    block appears to run for five minutes from the last request rather than
+    resetting at the start of the next AEMO five-minute window.
+cdr_surface:
+  note: >-
+    The Consumer Data Right surface at public.cdr.amber.com.au is governed by
+    the Data Standards Body traffic-threshold rules rather than by Amber's own
+    limit; no Amber-published figure exists for it.
+  standard: https://consumerdatastandardsaustralia.github.io/standards/

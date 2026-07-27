@@ -1,0 +1,167 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  openapi/amber-electric-public-api-openapi.json,
+  authentication/amber-electric-cdr-openid-configuration.json (fetched
+  anonymously 2026-07-27), and the ACCC CDR Register.
+note: >-
+  Amber has two surfaces with opposite conformance profiles. Its own product API
+  conforms to almost nothing beyond OpenAPI 3.0.0 and the IETF rate-limit header
+  draft — no problem+json, no OAuth, no energy-sector data standard. Its
+  regulated CDR surface conforms to the Australian Consumer Data Standards and,
+  through them, to the OpenID Connect and FAPI-grade security profile the
+  standards mandate. Every entry below is backed by a document that was fetched
+  or a header that was observed; nothing is asserted from marketing copy,
+  because Amber publishes no compliance page at all.
+standards:
+- id: openapi-3.0.0
+  conforms: true
+  surface: public-api
+  evidence: >-
+    openapi/amber-electric-public-api-openapi.json declares openapi 3.0.0 with 5
+    paths, 17 component schemas, 4 component headers and 2 component responses;
+    parsed with python3 json.load.
+- id: draft-ietf-httpapi-ratelimit-headers
+  conforms: true
+  surface: public-api
+  evidence: >-
+    components.headers declares RateLimit-Limit, RateLimit-Remaining,
+    RateLimit-Reset and RateLimit-Policy, applied to the 200 response of all
+    five operations, with RateLimit-Policy explicitly citing
+    https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/.
+- id: http-bearer-rfc6750
+  conforms: true
+  surface: public-api
+  evidence: 'components.securitySchemes.apiKey = {type: http, scheme: bearer}'
+- id: iso8601-datetimes
+  conforms: true
+  surface: public-api
+  evidence: >-
+    date and date-time formats throughout Interval/Renewable/Usage; descriptions
+    state "Formatted as a ISO 8601 date/time".
+- id: rfc9457-problem-details
+  conforms: false
+  surface: public-api
+  evidence: >-
+    No application/problem+json media type anywhere in the spec. The observed
+    401 body is {"message":"Unauthorized"}.
+- id: rfc9116-security-txt
+  conforms: false
+  surface: all
+  evidence: /.well-known/security.txt returned 404 on amber.com.au, app.amber.com.au and public.cdr.amber.com.au.
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: false
+  surface: cdr
+  evidence: >-
+    /.well-known/oauth-authorization-server returned 404 on
+    public.cdr.amber.com.au; discovery is published as OpenID Connect metadata
+    instead.
+- id: consumer-data-standards-au-energy
+  conforms: true
+  surface: cdr
+  evidence: >-
+    GET https://public.cdr.amber.com.au/cds-au/v1/discovery/status and
+    /cds-au/v1/discovery/outages both returned 200 with conformant CDS
+    data/links envelopes on x-v 1 (2026-07-27). The OIDC discovery document
+    advertises the full CDS energy scope set
+    (energy:electricity.servicepoints.basic|detail:read,
+    energy:electricity.usage:read, energy:electricity.der:read,
+    energy:accounts.basic|detail:read, energy:accounts.paymentschedule:read,
+    energy:accounts.concessions:read, energy:billing:read) plus
+    common:customer.basic|detail:read, cdr:registration and the admin scopes.
+  reference: https://consumerdatastandardsaustralia.github.io/standards/
+- id: cdr-designation-energy
+  conforms: true
+  surface: cdr
+  evidence: >-
+    Listed on the ACCC CDR Register as energy data holder brand
+    54968899-b7b5-ef11-95f6-6045bd3f1493 (ABN 98623603805) with publicBaseUri
+    https://public.cdr.amber.com.au, lastUpdated 2026-07-23.
+  reference: https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary
+- id: openid-connect-discovery
+  conforms: true
+  surface: cdr
+  evidence: >-
+    https://public.cdr.amber.com.au/.well-known/openid-configuration returns 200
+    anonymously with issuer, authorization_endpoint, token_endpoint, jwks_uri,
+    userinfo_endpoint, registration_endpoint and introspection_endpoint.
+- id: oauth2-authorization-code
+  conforms: true
+  surface: cdr
+  evidence: 'grant_types_supported: [authorization_code, client_credentials, refresh_token]; response_types_supported: [code]'
+- id: oauth2-pkce-rfc7636
+  conforms: true
+  surface: cdr
+  evidence: 'code_challenge_methods_supported: [S256]'
+- id: oauth2-par-rfc9126
+  conforms: true
+  surface: cdr
+  evidence: >-
+    pushed_authorization_request_endpoint published and
+    require_pushed_authorization_requests: true
+- id: oauth2-private-key-jwt-rfc7523
+  conforms: true
+  surface: cdr
+  evidence: 'token_endpoint_auth_methods_supported: [private_key_jwt]; signing algs ES256, PS256'
+- id: oauth2-mtls-bound-tokens-rfc8705
+  conforms: true
+  surface: cdr
+  evidence: 'tls_client_certificate_bound_access_tokens: true'
+- id: jarm-signed-authorization-responses
+  conforms: true
+  surface: cdr
+  evidence: 'response_modes_supported: [jwt]; authorization_signing_alg_values_supported: [ES256]'
+- id: oauth2-dynamic-client-registration-rfc7591
+  conforms: true
+  surface: cdr
+  evidence: >-
+    registration_endpoint https://secure.cdr.amber.com.au/connect/register,
+    reachable only by an accredited CDR data recipient presenting a software
+    statement assertion.
+- id: fapi-1.0-advanced
+  conforms: true
+  surface: cdr
+  evidence: >-
+    The Consumer Data Standards security profile is built on FAPI 1.0 Advanced,
+    and every marker it requires is present in Amber's own discovery document:
+    private_key_jwt client authentication, mandatory PAR, PKCE S256, pairwise
+    subject identifiers, mTLS-bound access tokens, JARM response mode, PS256/ES256
+    signing and acr urn:cds.au:cdr:2. Recorded from those observed markers — no
+    OpenID Foundation certification listing for Amber was found.
+- id: fhir-r4
+  conforms: false
+  evidence: Not applicable — energy retailer, no health data surface.
+- id: scim2
+  conforms: false
+  evidence: No /Users or /Groups surface.
+- id: odata
+  conforms: false
+- id: json-api
+  conforms: false
+- id: green-button-espi
+  conforms: false
+  surface: all
+  evidence: No reference found on any Amber surface (checked during the 2026-07-27 review).
+- id: openadr
+  conforms: false
+  evidence: No reference found.
+- id: ieee-2030.5
+  conforms: false
+  evidence: >-
+    No reference on the product API. Note that the amberelectric GitHub
+    organisation hosts open-dynamic-export, a CSIP-AUS/SEP2/IEEE 2030.5 dynamic
+    export-control project, but it is a standalone tool and not part of the
+    published API contract.
+- id: iec-cim-61968
+  conforms: false
+  evidence: No reference found.
+- id: ocpp-ocpi
+  conforms: false
+  evidence: No reference found despite Amber's EV charging and battery products.
+compliance_program:
+  published: false
+  note: >-
+    Amber publishes no trust centre, no security page and no certification list
+    (SOC 2, ISO 27001, PCI DSS). /security, /trust and /compliance on
+    amber.com.au all returned 404. Its verifiable compliance posture is
+    regulatory and external: the ACCC CDR Register listing above.

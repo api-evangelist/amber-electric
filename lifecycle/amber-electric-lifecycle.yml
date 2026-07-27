@@ -1,0 +1,80 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  openapi/amber-electric-public-api-openapi.json, the amberelectric/public-api
+  repository, and live probes run 2026-07-27.
+versioning:
+  scheme: uri-path
+  current: v1
+  base_url: https://api.amber.com.au/v1
+  spec_info_version: '1.0'
+  discrepancy: >-
+    The published swagger.json declares info.version 1.0, while the first-party
+    Python client generated from that contract states "API version: 2.0.0" in
+    its README and is itself versioned 2.0.x. Amber publishes no version history
+    that reconciles the two, so both are recorded rather than one being chosen.
+  policy_url: null
+  policy_documented: false
+deprecation:
+  policy_url: null
+  policy_documented: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No deprecation or sunset policy is published anywhere on Amber's surfaces,
+    and no RFC 8594 Sunset or Deprecation header is documented. A search of the
+    public-api repository for "deprecat" returned zero issues, PRs or
+    discussions.
+deprecated_operations: []
+status_page:
+  url: null
+  found: false
+  probes:
+  - url: https://status.amber.com.au/
+    result: DNS does not resolve
+  note: >-
+    Amber operates no public status page for the API. Outage information for the
+    regulated CDR surface is machine-readable instead — GET
+    https://public.cdr.amber.com.au/cds-au/v1/discovery/outages returned 200 with
+    {"data":{"outages":[]}} on 2026-07-27, and
+    /cds-au/v1/discovery/status returned {"data":{"status":"OK"}}. That is a
+    Consumer Data Standards requirement, not an Amber product decision, and it
+    covers only the CDR endpoints.
+cds_status_endpoints:
+- url: https://public.cdr.amber.com.au/cds-au/v1/discovery/status
+  status: 200
+  headers: 'x-v: 1'
+- url: https://public.cdr.amber.com.au/cds-au/v1/discovery/outages
+  status: 200
+  headers: 'x-v: 1'
+sla:
+  url: null
+  uptime_target: null
+  documented: false
+changelog:
+  url: null
+  documented: false
+  note: >-
+    The contract repository publishes no releases and no tags; the last commit
+    to swagger.json was 2024-02-19 ("Adding operationIds. Fixing incorrect
+    JSON") and the last commit to the repository at all was 2024-06-24. Change
+    announcements happen ad hoc in GitHub Discussions rather than in a dated
+    changelog.
+  change_channel: https://github.com/amberelectric/public-api/discussions
+support:
+  channel: https://github.com/amberelectric/public-api/discussions
+  help_centre: https://help.amber.com.au/
+maturity:
+  contract_last_changed: '2024-02-19'
+  repository_last_activity: '2024-06-24'
+  assessment: >-
+    Stable-but-static. The contract has not changed in over two years, the
+    operation set is unchanged, and the community forum is the only channel
+    through which change is communicated.
+cdr_surface:
+  versioning_scheme: header
+  header: 'x-v (with x-min-v for minimum acceptable version)'
+  observed: 'x-v: 1 accepted on both discovery endpoints'
+  authority: >-
+    Version lifecycle for this surface is set by the Data Standards Body, not by
+    Amber — see https://consumerdatastandardsaustralia.github.io/standards/.

@@ -1,0 +1,57 @@
+generated: '2026-07-27'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: amber.com.au
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 16 06:03:17 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: app.amber.com.au
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Mar 10 23:59:59 2027 GMT
+  hsts: false
+- host: api.amber.com.au
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Mar 10 23:59:59 2027 GMT
+  hsts: null
+- host: public.cdr.amber.com.au
+  role: Consumer Data Right public base URI
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 14 15:43:02 2026 GMT
+  cert_verify: ok
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+  hsts_preload: true
+  probed: '2026-07-27'
+  note: Added by hand — the automated probe covers only the first three apis.yml hosts.
+- host: secure.cdr.amber.com.au
+  role: Consumer Data Right token/registration host (accredited recipients only)
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Jul  2 23:59:59 2027 GMT
+  cert_verify: 'failed anonymously — 20 (unable to get local issuer certificate)'
+  hsts: false
+  probed: '2026-07-27'
+  note: >-
+    An anonymous client cannot complete a normal TLS handshake against this
+    host; it is reached with a CDR-issued client certificate under mutual TLS,
+    which is consistent with tls_client_certificate_bound_access_tokens: true in
+    the OpenID Connect discovery document. Recorded as observed, not as a defect.
+domains:
+- domain: amber.com.au
+  dnssec: false
+  caa:
+  - 0 issuewild "amazontrust.com"
+  - 0 issue "amazontrust.com"
+  - 0 issue "digicert.com"
+  - 0 issue "letsencrypt.org"
+  - 0 issue "pki.goog; cansignhttpexchanges=yes"
+  spf: true
+  dmarc: true
+  dmarc_policy: none

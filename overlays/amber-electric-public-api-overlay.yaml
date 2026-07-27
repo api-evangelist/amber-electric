@@ -1,0 +1,117 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Amber Electric Public API
+  version: 1.0.0
+extends: openapi/amber-electric-public-api-openapi.json
+x-apievangelist:
+  generated: '2026-07-27'
+  method: generated
+  source: >-
+    Derived from openapi/amber-electric-public-api-openapi.json plus artifacts in
+    this repository (rate-limits/, conventions/, errors/, authentication/). The
+    harvested contract is never mutated — every enhancement lives here.
+  rationale: >-
+    Amber's published contract is valid and honest but thin in three specific
+    ways this overlay repairs: no operation carries a summary or a tag, the
+    anonymous renewables operation is not signposted as anonymous, and the 429
+    the service really returns when rate limiting bites is undeclared. Nothing
+    here changes semantics; it adds documentation the running service already
+    honours.
+actions:
+- target: $.info
+  update:
+    description: >-
+      Amber Electric's public REST API. Five read-only operations over
+      half-hourly National Electricity Market data: the sites on your account,
+      actual/current/forecast prices for a site, usage for a site, and the
+      current renewable-energy percentage of the grid for a NEM state.
+      Authentication is an unscoped HTTP bearer token generated from the
+      Developers tab of the logged-in Amber customer app; one operation —
+      GET /state/{state}/renewables/current — is explicitly anonymous. Rate
+      limit: 50 calls per 5 minutes, per account.
+    contact:
+      name: Amber Public API discussions
+      url: https://github.com/amberelectric/public-api/discussions
+    x-apievangelist-artifacts:
+      conventions: conventions/amber-electric-conventions.yml
+      errors: errors/amber-electric-problem-types.yml
+      rate_limits: rate-limits/amber-electric-rate-limits.yml
+      authentication: authentication/amber-electric-authentication.yml
+      data_model: data-model/amber-electric-data-model.yml
+      skills: skills/_index.yml
+    x-access-gate: customer-account-required
+- target: $
+  update:
+    tags:
+    - name: Renewables
+      description: Grid renewable-energy percentage for a National Electricity Market state. Anonymous.
+    - name: Sites
+      description: The sites, NMIs and meter channels on your Amber account.
+    - name: Prices
+      description: Actual, current and forecast half-hourly prices for one of your sites.
+    - name: Usage
+      description: Interval consumption, generation, cost and data quality for one of your sites.
+- target: $.paths['/state/{state}/renewables/current'].get
+  update:
+    summary: Get current grid renewables for a NEM state
+    tags: [Renewables]
+    x-anonymous: true
+    x-apievangelist-note: >-
+      The only operation on this API that answers without a credential — it
+      carries an explicit `security: []` override, confirmed returning 200
+      anonymously for nsw, vic, qld and sa on 2026-07-27.
+- target: $.paths['/sites'].get
+  update:
+    summary: List the sites on your account
+    tags: [Sites]
+    x-apievangelist-note: >-
+      Call this first — siteId is a ULID assigned by Amber, not the NMI, and
+      every other site-scoped operation needs it.
+- target: $.paths['/sites/{siteId}/prices'].get
+  update:
+    summary: Get prices for a site across a date range
+    tags: [Prices]
+- target: $.paths['/sites/{siteId}/prices/current'].get
+  update:
+    summary: Get the current price for a site
+    tags: [Prices]
+- target: $.paths['/sites/{siteId}/usage'].get
+  update:
+    summary: Get usage for a site across a date range
+    tags: [Usage]
+    x-apievangelist-note: Returns at most 90 days per call; startDate and endDate are both required.
+- target: $.components.securitySchemes.apiKey
+  update:
+    description: >-
+      Unscoped bearer token generated from the Developers tab inside the
+      logged-in Amber customer app at https://app.amber.com.au/developers.
+      Requires an active Amber electricity account — there is no self-serve
+      developer signup, sandbox or trial key.
+- target: $.components.responses
+  update:
+    TooManyRequests:
+      description: >-
+        Rate limit exceeded. Amber enforces 50 calls per 5 minutes per account
+        (announced at
+        https://github.com/amberelectric/public-api/discussions/146). Undeclared
+        in the published contract; added here because the running service
+        returns it.
+      headers:
+        RateLimit-Limit:
+          $ref: '#/components/headers/RateLimit-Limit'
+        RateLimit-Remaining:
+          $ref: '#/components/headers/RateLimit-Remaining'
+        RateLimit-Reset:
+          $ref: '#/components/headers/RateLimit-Reset'
+        RateLimit-Policy:
+          $ref: '#/components/headers/RateLimit-Policy'
+    Error:
+      description: 'Error envelope returned by this API: {"message": "<string>"}'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unauthorized

@@ -1,0 +1,28 @@
+generated: '2026-07-27'
+method: generated
+source: openapi/amber-electric-public-api-openapi.json
+note: >-
+  Packaged operating instructions for the three real flows Amber's five-operation
+  API supports. Every operationId referenced was verified against the published
+  contract; no operation was invented. Amber publishes no AGENTS.md or skill
+  files of its own — searched the amberelectric GitHub organisation and the docs
+  host on 2026-07-27.
+skills:
+- file: amber-electric-grid-renewables.md
+  name: Read live grid renewables for an Australian state
+  api: openapi/amber-electric-public-api-openapi.json
+  auth: none
+  operations: [getCurrentRenewables]
+- file: amber-electric-site-prices.md
+  name: Read current and forecast electricity prices for an Amber site
+  api: openapi/amber-electric-public-api-openapi.json
+  auth: bearer
+  operations: [getSites, getCurrentPrices, getPrices]
+- file: amber-electric-usage-history.md
+  name: Pull interval usage and cost history for an Amber site
+  api: openapi/amber-electric-public-api-openapi.json
+  auth: bearer
+  operations: [getSites, getUsage]
+coverage:
+  operations_total: 5
+  operations_covered: 5

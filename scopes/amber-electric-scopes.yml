@@ -1,0 +1,95 @@
+generated: '2026-07-27'
+method: searched
+source: https://public.cdr.amber.com.au/.well-known/openid-configuration
+local_source: authentication/amber-electric-cdr-openid-configuration.json
+docs: https://consumerdatastandardsaustralia.github.io/standards/#end-points
+fetched: '2026-07-27'
+http_status: 200
+anonymous: true
+note: >-
+  Amber's own product API has no OAuth surface at all — it uses an unscoped
+  bearer token minted in the customer app, so there are no scopes to record for
+  it. Every scope below belongs to Amber's regulated Consumer Data Right energy
+  data-holder surface and was read verbatim from the anonymously-served OpenID
+  Connect discovery document at the CDR public base URI. The scope names and
+  their meanings are defined by the Australian Data Standards Body; the
+  descriptions here summarise the CDS energy and common data clusters those
+  scopes unlock. Access requires ACCC accreditation as a data recipient — no
+  general developer can obtain any of these.
+surface: cdr
+schemes:
+- name: CDR OpenID Connect
+  issuer: https://public.cdr.amber.com.au
+  source: authentication/amber-electric-cdr-openid-configuration.json
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://public.cdr.amber.com.au/connect/authorize
+    tokenUrl: https://secure.cdr.amber.com.au/connect/token
+    pushedAuthorizationRequestUrl: https://secure.cdr.amber.com.au/connect/par
+    par_required: true
+    client_authentication: private_key_jwt
+    pkce: S256
+  - flow: clientCredentials
+    tokenUrl: https://secure.cdr.amber.com.au/connect/token
+    note: Used for the admin/metadata-update endpoints between the register and the data holder.
+scopes:
+- scope: openid
+  description: OpenID Connect authentication — issue an ID token for the consenting consumer.
+  flows: [authorizationCode]
+- scope: profile
+  description: Consumer profile claims (name, given_name, family_name).
+  flows: [authorizationCode]
+- scope: common:customer.basic:read
+  description: Basic customer identity — name or organisation name and customer type.
+  flows: [authorizationCode]
+- scope: common:customer.detail:read
+  description: Detailed customer record including contact details and addresses.
+  flows: [authorizationCode]
+- scope: cdr:registration
+  description: Dynamic client registration management for an accredited data recipient's software product.
+  flows: [clientCredentials]
+- scope: admin:metrics.basic:read
+  description: Data-holder administration — read the CDR performance/availability metrics the standards require.
+  flows: [clientCredentials]
+- scope: admin:metadata:update
+  description: Data-holder administration — accept a metadata-update notification from the CDR Register.
+  flows: [clientCredentials]
+- scope: energy:electricity.servicepoints.basic:read
+  description: Basic electricity service point (NMI) records held for the consumer.
+  flows: [authorizationCode]
+- scope: energy:electricity.servicepoints.detail:read
+  description: Detailed service point records, including registered metering and network details.
+  flows: [authorizationCode]
+- scope: energy:electricity.usage:read
+  description: Interval-level electricity usage data for the consumer's service points.
+  flows: [authorizationCode]
+- scope: energy:electricity.der:read
+  description: Distributed energy resource records — solar, battery and inverter installation details.
+  flows: [authorizationCode]
+- scope: energy:accounts.basic:read
+  description: Basic energy account records held with the retailer.
+  flows: [authorizationCode]
+- scope: energy:accounts.detail:read
+  description: Detailed energy account records including plan and tariff detail.
+  flows: [authorizationCode]
+- scope: energy:accounts.paymentschedule:read
+  description: Payment schedules configured on the consumer's energy accounts.
+  flows: [authorizationCode]
+- scope: energy:accounts.concessions:read
+  description: Concessions and rebates applied to the consumer's energy accounts.
+  flows: [authorizationCode]
+- scope: energy:billing:read
+  description: Billing and invoice history for the consumer's energy accounts.
+  flows: [authorizationCode]
+summary:
+  scope_count: 16
+  energy_scopes: 9
+  common_scopes: 2
+  admin_scopes: 2
+  registration_scopes: 1
+  identity_scopes: 2
+  access_gate: accredited-only
+  note: >-
+    The presence of the complete energy cluster — service points, usage, DER,
+    accounts, payment schedule, concessions and billing — is the signature of a
+    full Consumer Data Standards energy build rather than a partial one.

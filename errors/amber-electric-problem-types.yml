@@ -1,0 +1,100 @@
+generated: '2026-07-27'
+method: derived
+source: openapi/amber-electric-public-api-openapi.json
+format: proprietary
+envelope: '{"message": "<string>"}'
+envelope_evidence: >-
+  Observed live and anonymously on 2026-07-27: GET
+  https://api.amber.com.au/v1/sites returned HTTP 401 with body
+  {"message":"Unauthorized"}. The OpenAPI declares every error response with a
+  description only and no schema or media type, so the envelope is recorded from
+  observation.
+rfc9457: false
+note: >-
+  Amber publishes no error-code registry and no error reference page. There are
+  no application-level error codes at all — the surface is five GET operations
+  and the failure modes are the HTTP status codes below. The one contract gap
+  worth naming is 429: rate limiting is real and enforced (50 calls per 5
+  minutes per account) but no operation declares a 429 response.
+problems:
+- status: 400
+  title: Bad request
+  description: Bad request
+  source_operations:
+  - openapi/amber-electric-public-api-openapi.json#getCurrentRenewables
+  - openapi/amber-electric-public-api-openapi.json#getPrices
+  - openapi/amber-electric-public-api-openapi.json#getCurrentPrices
+  - openapi/amber-electric-public-api-openapi.json#getUsage
+  remediation: >-
+    Check the query parameters. Typical causes are a resolution value the
+    operation does not accept (getCurrentPrices and getUsage only accept 30), a
+    malformed ISO 8601 date, a usage window wider than 90 days, or missing
+    required startDate/endDate on getUsage.
+- status: 401
+  title: Unauthorized
+  description: API key is missing or invalid
+  observed_body: '{"message":"Unauthorized"}'
+  source_operations:
+  - openapi/amber-electric-public-api-openapi.json#getSites
+  - openapi/amber-electric-public-api-openapi.json#getPrices
+  - openapi/amber-electric-public-api-openapi.json#getCurrentPrices
+  - openapi/amber-electric-public-api-openapi.json#getUsage
+  component: '#/components/responses/UnauthorizedError'
+  remediation: >-
+    Send Authorization: Bearer <token> with a token generated from the
+    Developers tab of the logged-in Amber customer app at
+    https://app.amber.com.au/developers. Tokens are account-bound; there is no
+    sandbox or trial token.
+- status: 404
+  title: Not found
+  description: >-
+    State not found (getCurrentRenewables) or Site not found (getPrices,
+    getCurrentPrices, getUsage)
+  source_operations:
+  - openapi/amber-electric-public-api-openapi.json#getCurrentRenewables
+  - openapi/amber-electric-public-api-openapi.json#getPrices
+  - openapi/amber-electric-public-api-openapi.json#getCurrentPrices
+  - openapi/amber-electric-public-api-openapi.json#getUsage
+  remediation: >-
+    For renewables use one of the four valid NEM states: nsw, sa, qld, vic. For
+    site-scoped calls resolve the siteId from GET /sites first — site ids are
+    ULIDs and are not the NMI.
+- status: 500
+  title: Internal Server Error
+  description: Internal Server Error
+  source_operations:
+  - openapi/amber-electric-public-api-openapi.json#getCurrentRenewables
+  - openapi/amber-electric-public-api-openapi.json#getSites
+  - openapi/amber-electric-public-api-openapi.json#getPrices
+  - openapi/amber-electric-public-api-openapi.json#getCurrentPrices
+  - openapi/amber-electric-public-api-openapi.json#getUsage
+  component: '#/components/responses/InternalServerError'
+  remediation: >-
+    Retry with backoff. All five operations are GETs and safe to retry, but the
+    retry consumes rate-limit quota.
+undeclared:
+- status: 429
+  title: Too many requests
+  evidence: >-
+    Not present in the OpenAPI. Rate limiting was announced by Amber at
+    https://github.com/amberelectric/public-api/discussions/146 (50 calls per
+    5 minutes, per account) and developers report hitting it in
+    https://github.com/amberelectric/public-api/issues/277.
+  remediation: >-
+    Read RateLimit-Remaining and RateLimit-Reset from any 200 response and pace
+    calls; a blocked window is reported to run five minutes from the last
+    request.
+  detail: rate-limits/amber-electric-rate-limits.yml
+- status: 403
+  title: Forbidden
+  evidence: >-
+    Returned by the edge for any unrouted path on api.amber.com.au (observed on
+    /, /v1, /openapi.json and every /.well-known/ path). Not an application
+    error — it means the path is not served.
+cdr_surface:
+  note: >-
+    Errors on the regulated surface at public.cdr.amber.com.au follow the
+    Consumer Data Standards error payload (urn:au-cds:error:cds:* codes in a
+    meta/errors envelope), which is defined by the Data Standards Body rather
+    than by Amber.
+  reference: https://consumerdatastandardsaustralia.github.io/standards/

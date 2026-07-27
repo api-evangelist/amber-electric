@@ -1,0 +1,72 @@
+generated: '2026-07-27'
+method: searched
+source: live anonymous HTTP probes of every Amber host in apis.yml, run 2026-07-27
+note: >-
+  Amber publishes exactly one machine-readable discovery document at a
+  /.well-known/ path, and it is on the regulated Consumer Data Right host rather
+  than on the voluntary product API. api.amber.com.au answers 403 to every
+  /.well-known/ path (the edge rejects unknown paths before routing, so 403 here
+  means "not served", not "forbidden to you"). The marketing site and customer
+  app both answer a clean 404. No security.txt (RFC 9116), no api-catalog
+  (RFC 9727), no ai-plugin.json and no RFC 8414 authorization-server metadata
+  exist anywhere on the estate.
+hosts:
+- host: https://public.cdr.amber.com.au
+  role: Consumer Data Right energy data holder public base URI
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: ../authentication/amber-electric-cdr-openid-configuration.json
+    note: >-
+      Served anonymously. Saved verbatim in authentication/ during the first
+      round; indexed here rather than duplicated. This is the primary evidence
+      that the CDR energy mandate is implemented at Amber.
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+- host: https://api.amber.com.au
+  role: Amber public product API
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  - path: /.well-known/ai-plugin.json
+    status: 403
+  note: >-
+    Every unrouted path on this host returns 403, including / and /v1. The API
+    itself answers normally on its documented routes.
+- host: https://amber.com.au
+  role: marketing site
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+- host: https://app.amber.com.au
+  role: logged-in customer app, where API tokens are minted
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /llms.txt
+    status: 404
+summary:
+  documents_found: 1
+  security_txt: false
+  api_catalog: false
+  openid_configuration: true
+  oauth_authorization_server: false
+  ai_plugin: false

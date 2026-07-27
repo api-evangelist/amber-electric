@@ -114,18 +114,75 @@ apis:
     url: https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary
   - type: Documentation
     url: https://www.cdr.gov.au/consumers/energy
+  - type: OAuthScopes
+    url: scopes/amber-electric-scopes.yml
 common:
+- type: AgenticAccess
+  url: agentic-access/amber-electric-agentic-access.yml
+- type: DomainSecurity
+  url: security/amber-electric-domain-security.yml
+- type: Authentication
+  url: authentication/amber-electric-authentication.yml
+- type: Packages
+  url: packages/amber-electric-packages.yml
+- type: SDKs
+  url: packages/amber-electric-packages.yml
+- type: WellKnown
+  url: well-known/amber-electric-well-known.yml
+- type: LLMsTxt
+  url: llms/amber-electric-llms.txt
+- type: MCPServer
+  url: mcp/amber-electric-mcp.yml
+- type: Overlay
+  url: overlays/amber-electric-public-api-overlay.yaml
+- type: Conformance
+  url: conformance/amber-electric-conformance.yml
+- type: ErrorCatalog
+  url: errors/amber-electric-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/amber-electric-lifecycle.yml
+- type: Conventions
+  url: conventions/amber-electric-conventions.yml
+- type: RateLimits
+  url: rate-limits/amber-electric-rate-limits.yml
+- type: DataModel
+  url: data-model/amber-electric-data-model.yml
+- type: Examples
+  url: examples/amber-electric-examples.yml
+- type: OAuthScopes
+  url: scopes/amber-electric-scopes.yml
+- type: AgentSkill
+  name: Read live grid renewables for an Australian state
+  url: skills/amber-electric-grid-renewables.md
+- type: AgentSkill
+  name: Read current and forecast electricity prices for an Amber site
+  url: skills/amber-electric-site-prices.md
+- type: AgentSkill
+  name: Pull interval usage and cost history for an Amber site
+  url: skills/amber-electric-usage-history.md
 - type: Website
   url: https://amber.com.au/
+- type: DeveloperPortal
+  url: https://app.amber.com.au/developers
 - type: Documentation
   url: https://app.amber.com.au/developers
+- type: APIReference
+  url: https://app.amber.com.au/developers/documentation
+- type: SourceCode
+  url: https://github.com/amberelectric/public-api
 - type: GitHubOrganization
   url: https://github.com/amberelectric
 - type: Blog
   url: https://amber.com.au/blog
 - type: Support
   url: https://help.amber.com.au/
-- type: Privacy
+- type: Community
+  url: https://github.com/amberelectric/public-api/discussions
+- type: Pricing
+  url: https://amber.com.au/pricing
+- type: TermsOfService
+  url: https://amber.com.au/terms
+- type: PrivacyPolicy
   url: https://amber.com.au/privacy
 - type: SignUp
   url: https://app.amber.com.au/developers

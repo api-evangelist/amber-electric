@@ -1,0 +1,150 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  openapi/amber-electric-public-api-openapi.json plus
+  https://github.com/amberelectric/public-api/discussions/146 and live probes of
+  https://api.amber.com.au/v1 run 2026-07-27.
+summary: >-
+  Amber's public API is a small, strictly read-only, five-operation REST surface
+  over half-hourly National Electricity Market intervals. Everything about its
+  conventions follows from that: bearer auth, no writes, no idempotency surface,
+  no cursor pagination — the window is chosen with date or interval-count
+  parameters instead — and a plain non-RFC-9457 error envelope. The single most
+  distinctive convention is temporal: every interval is anchored in NEM time
+  (UTC+10, no daylight saving), and the `date` an interval belongs to can differ
+  from the date component of its `nemTime` because the trading day's last
+  interval ends at 12:00 the following day.
+authentication:
+  style: HTTP bearer token
+  header: 'Authorization: Bearer <token>'
+  declared_as: components.securitySchemes.apiKey (type http, scheme bearer)
+  issued_by: >-
+    The Developers tab inside the logged-in customer app at
+    https://app.amber.com.au/developers. Requires an active Amber electricity
+    account; there is no self-serve developer signup and no sandbox key.
+  scopes: none — the token is unscoped and grants read access to the account's own sites
+  anonymous_exception: >-
+    GET /state/{state}/renewables/current carries an explicit `security: []`
+    override and answers with no credential at all.
+  detail: authentication/amber-electric-authentication.yml
+idempotency:
+  supported: false
+  reason: >-
+    The API exposes five GET operations and no write operations, so there is no
+    idempotency-key contract to document. All five calls are naturally
+    idempotent and safe to retry. No Idempotency-Key header, parameter or
+    replay-retention policy is declared in the spec or in the docs.
+pagination:
+  style: none
+  detail: >-
+    No page, cursor, limit or offset parameters exist anywhere in the contract
+    and no pagination envelope is returned — every operation returns a bare JSON
+    array. Result-set size is controlled by time windowing instead.
+  windowing_parameters:
+  - name: startDate
+    type: date (ISO 8601)
+    operations: [getPrices, getUsage]
+    note: Required on getUsage, defaults to today on getPrices.
+  - name: endDate
+    type: date (ISO 8601)
+    operations: [getPrices, getUsage]
+    note: Required on getUsage, defaults to today on getPrices.
+  - name: next
+    type: integer
+    operations: [getCurrentPrices, getCurrentRenewables]
+    note: Return the next N forecast intervals.
+  - name: previous
+    type: integer
+    operations: [getCurrentPrices, getCurrentRenewables]
+    note: Return the previous N actual intervals.
+  max_window: >-
+    getUsage returns at most 90 days of data ("The API can only return 90-days
+    worth of data" — operation description).
+resolution:
+  parameter: resolution
+  values_by_operation:
+    getPrices: [5, 30]
+    getCurrentRenewables: [5, 30]
+    getCurrentPrices: [30]
+    getUsage: [30]
+  default: 30
+  unit: minutes
+  note: >-
+    Interval duration in minutes. Only the historical price and renewables
+    operations accept 5-minute resolution; current price and usage are
+    half-hourly only.
+polymorphism:
+  style: OpenAPI discriminator on a `type` property
+  families:
+  - base: Interval
+    discriminator: type
+    variants: [ActualInterval, CurrentInterval, ForecastInterval]
+  - base: Renewable
+    discriminator: type
+    variants: [ActualRenewable, CurrentRenewable, ForecastRenewable]
+  note: >-
+    Price, renewables and usage arrays mix past, present and future records in a
+    single response; a client must switch on `type` rather than assume a shape.
+    Usage extends Interval with channelIdentifier, kwh, quality and cost.
+ordering:
+  documented: true
+  rule: 'Return order: General > Controlled Load > Feed In.'
+  warning: >-
+    Stated verbatim in three operation descriptions: "If a channel is added or
+    removed the index offset will change. It is best to filter or group the
+    array by channel type." Positional indexing into the array is explicitly
+    unsafe.
+time_semantics:
+  zone: NEM time (UTC+10, no daylight saving)
+  fields:
+  - name: nemTime
+    meaning: Time at the END of the interval, in UTC+10
+  - name: startTime
+    meaning: Interval start in UTC
+  - name: endTime
+    meaning: Interval end in UTC
+  - name: date
+    meaning: >-
+      The trading date the interval belongs to in NEM time; may differ from the
+      date component of nemTime because the last interval of the day ends at
+      12:00 the following day.
+  format: ISO 8601 throughout
+units:
+  price: cents per kilowatt-hour (c/kWh), GST inclusive
+  energy: kilowatt-hours (kWh); generation/export is expressed as a negative number
+  renewables: percentage of the grid, 0-100
+  cost: cents, GST inclusive
+error_envelope:
+  format: proprietary
+  shape: '{"message": "<string>"}'
+  evidence: >-
+    Observed live on 2026-07-27 — GET https://api.amber.com.au/v1/sites with no
+    credential returned 401 with body {"message":"Unauthorized"}.
+  rfc9457: false
+  note: >-
+    The OpenAPI declares error responses with descriptions only and no response
+    schema, so the envelope is documented here from observation rather than from
+    the contract.
+  detail: errors/amber-electric-problem-types.yml
+rate_limiting:
+  limit: 50 calls per 5 minutes, per account
+  headers: [RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset, RateLimit-Policy]
+  standard: draft-ietf-httpapi-ratelimit-headers
+  detail: rate-limits/amber-electric-rate-limits.yml
+versioning:
+  style: URI path
+  current: v1
+  base_url: https://api.amber.com.au/v1
+  detail: lifecycle/amber-electric-lifecycle.yml
+request_tracing:
+  documented: false
+  note: No request-id or correlation header is documented in the spec or the repository.
+content_type: application/json
+cdr_surface:
+  note: >-
+    The regulated Consumer Data Right surface at public.cdr.amber.com.au follows
+    an entirely different convention set defined by the Data Standards Body —
+    x-v / x-min-v version headers, x-fapi-interaction-id request correlation,
+    page/page-size pagination and a CDS meta/links/data envelope. Those
+    conventions belong to the standard, not to Amber, and are documented at
+    https://consumerdatastandardsaustralia.github.io/standards/.

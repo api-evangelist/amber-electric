@@ -1,0 +1,159 @@
+generated: '2026-07-27'
+method: derived
+source: openapi/amber-electric-public-api-openapi.json
+note: >-
+  Derived from the component schemas and $ref graph of Amber's published
+  contract. The model is unusually small and almost entirely temporal: one
+  account-level entity (Site) with meter Channels, and two interval families
+  (Interval for prices/usage, Renewable for grid greenness) whose variants are
+  distinguished by a `type` discriminator rather than by separate endpoints. The
+  only cross-entity key in the whole API is siteId, which is a path parameter
+  rather than a body field.
+entities:
+- name: Site
+  description: A premises on the account, identified by a ULID and a National Metering Identifier.
+  identifier: id
+  identifier_format: ULID (example 01F5A5CRKMZ5BCX9P1S4V990AM)
+  natural_key: nmi (10-11 characters)
+  fields: [id, nmi, channels, network, status]
+  enums:
+    status: [pending, active, closed]
+  operations: [getSites]
+- name: Channel
+  description: A meter channel on a site — general, controlled load or feed-in.
+  identifier: identifier
+  identifier_example: E1
+  fields: [identifier, type, tariff]
+  embedded_in: Site.channels
+- name: Interval
+  description: One priced time interval (5, 15 or 30 minutes) in NEM time.
+  abstract: true
+  discriminator: type
+  fields: [duration, spotPerKwh, perKwh, date, nemTime, startTime, endTime, renewables, channelType, tariffInformation, spikeStatus, descriptor]
+  variants: [ActualInterval, CurrentInterval, ForecastInterval]
+  operations: [getPrices, getCurrentPrices]
+- name: ActualInterval
+  description: A settled interval price.
+  extends: Interval
+- name: CurrentInterval
+  description: >-
+    The in-progress interval — a weighted average of five-minute actual and
+    forecast prices. Adds `estimate` (false once the price is locked in) and an
+    optional `range`.
+  extends: Interval
+  adds: [estimate, range]
+- name: ForecastInterval
+  description: A forecast price based on AEMO modelling. Adds an optional `range` of possible spot prices.
+  extends: Interval
+  adds: [range]
+- name: Usage
+  description: >-
+    Consumption or generation for one interval on one channel, with cost and
+    data quality. Extends Interval, so it carries the full price context too.
+  extends: Interval
+  adds: [channelIdentifier, kwh, quality, cost]
+  enums:
+    quality: [estimated, billable]
+  operations: [getUsage]
+- name: Renewable
+  description: Grid renewable-energy percentage for a NEM state over one interval.
+  abstract: true
+  discriminator: type
+  fields: [type, duration, date, nemTime, startTime, endTime, renewables, descriptor]
+  variants: [ActualRenewable, CurrentRenewable, ForecastRenewable]
+  operations: [getCurrentRenewables]
+- name: ActualRenewable
+  extends: Renewable
+- name: CurrentRenewable
+  extends: Renewable
+- name: ForecastRenewable
+  extends: Renewable
+  description: Forecast renewables based on AEMO modelling.
+- name: TariffInformation
+  description: How the site's tariff structure affects an interval.
+  fields: [period, season, block, demandWindow]
+  enums:
+    period: [offPeak, shoulder, solarSponge, peak]
+    season: [default, summer, autumn, winter, spring, nonSummer, holiday, weekend, weekendHoliday, weekday]
+  embedded_in: Interval.tariffInformation
+- name: Range
+  description: Minimum and maximum possible NEM spot prices (c/kWh) when prices are volatile.
+  fields: [min, max]
+  embedded_in: [ForecastInterval.range, CurrentInterval.range]
+value_types:
+- name: ChannelType
+  values: [general, controlledLoad, feedIn]
+- name: SpikeStatus
+  values: [none, potential, spike]
+- name: PriceDescriptor
+  values: [negative, extremelyLow, veryLow, low, neutral, high, spike]
+  note: '`negative` is retired and replaced by `extremelyLow`.'
+- name: RenewableDescriptor
+  values: [best, great, ok, notGreat, worst]
+relationships:
+- from: Site
+  to: Channel
+  kind: has_many
+  via: channels
+  evidence: 'Site.channels: array of $ref Channel'
+- from: Interval
+  to: ChannelType
+  kind: has_one
+  via: channelType
+- from: Interval
+  to: TariffInformation
+  kind: has_one
+  via: tariffInformation
+  nullable: true
+- from: Interval
+  to: SpikeStatus
+  kind: has_one
+  via: spikeStatus
+- from: Interval
+  to: PriceDescriptor
+  kind: has_one
+  via: descriptor
+- from: ForecastInterval
+  to: Range
+  kind: has_one
+  via: range
+  nullable: true
+- from: CurrentInterval
+  to: Range
+  kind: has_one
+  via: range
+  nullable: true
+- from: Renewable
+  to: RenewableDescriptor
+  kind: has_one
+  via: descriptor
+- from: Interval
+  to: Site
+  kind: belongs_to
+  via: siteId (path parameter)
+  evidence: >-
+    /sites/{siteId}/prices and /sites/{siteId}/prices/current are scoped by the
+    Site id returned from /sites. There is no site field on the interval body.
+- from: Usage
+  to: Site
+  kind: belongs_to
+  via: siteId (path parameter)
+- from: Usage
+  to: Channel
+  kind: belongs_to
+  via: channelIdentifier
+  evidence: Usage.channelIdentifier matches Channel.identifier (example E1).
+- from: Renewable
+  to: NEM state
+  kind: belongs_to
+  via: state (path parameter, one of nsw, sa, qld, vic)
+inheritance:
+  style: OpenAPI allOf + discriminator on `type`
+  chains:
+  - Interval -> ActualInterval | CurrentInterval | ForecastInterval | Usage
+  - Renewable -> ActualRenewable | CurrentRenewable | ForecastRenewable
+counts:
+  schemas: 17
+  entities: 14
+  value_types: 4
+  relationships: 12

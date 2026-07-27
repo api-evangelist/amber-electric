@@ -1,0 +1,93 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  openapi/amber-electric-public-api-openapi.json and
+  authentication/amber-electric-cdr-openid-configuration.json (fetched
+  anonymously from https://public.cdr.amber.com.au/.well-known/openid-configuration
+  on 2026-07-27).
+docs: https://app.amber.com.au/developers
+summary:
+  types:
+  - http
+  - openIdConnect
+  http_schemes:
+  - bearer
+  oauth2_flows:
+  - authorizationCode
+  - clientCredentials
+  api_key_in: []
+  anonymous_operations: 1
+  access_gate: customer-account-required (own API) / accredited-only (CDR surface)
+note: >-
+  Two independent authentication models coexist at Amber and neither is
+  self-serve. The product API uses a single unscoped HTTP bearer token that only
+  an existing Amber electricity customer can mint from the logged-in app, with
+  one operation explicitly exempted from auth entirely. The regulated Consumer
+  Data Right surface uses the full Australian CDS security profile — OpenID
+  Connect with mandatory pushed authorization requests, private_key_jwt client
+  authentication, PKCE S256, pairwise subjects and mTLS-bound access tokens —
+  reachable only by an ACCC-accredited data recipient.
+schemes:
+- name: apiKey
+  type: http
+  scheme: bearer
+  surface: public-api
+  sources:
+  - openapi/amber-electric-public-api-openapi.json
+  header: 'Authorization: Bearer <token>'
+  scoped: false
+  issued_by: >-
+    Developers tab inside the logged-in customer app at
+    https://app.amber.com.au/developers — enable Developers Mode and click
+    "Generate a new token". Requires an active Amber electricity account at a
+    serviced Australian address. No developer signup, sandbox, trial key or
+    application form exists.
+  applies_to:
+  - getSites
+  - getPrices
+  - getCurrentPrices
+  - getUsage
+  exempt:
+  - operationId: getCurrentRenewables
+    reason: >-
+      The operation declares an explicit `security: []` override. Confirmed
+      returning 200 anonymously for nsw, vic, qld and sa on 2026-07-27.
+  failure:
+    status: 401
+    body: '{"message":"Unauthorized"}'
+- name: CDR OpenID Connect
+  type: openIdConnect
+  surface: cdr
+  sources:
+  - authentication/amber-electric-cdr-openid-configuration.json
+  openIdConnectUrl: https://public.cdr.amber.com.au/.well-known/openid-configuration
+  issuer: https://public.cdr.amber.com.au
+  endpoints:
+    authorization: https://public.cdr.amber.com.au/connect/authorize
+    token: https://secure.cdr.amber.com.au/connect/token
+    pushed_authorization_request: https://secure.cdr.amber.com.au/connect/par
+    introspection: https://secure.cdr.amber.com.au/connect/introspect
+    revocation: https://secure.cdr.amber.com.au/arrangements/revoke
+    cdr_arrangement_revocation: https://secure.cdr.amber.com.au/arrangements/revoke
+    userinfo: https://secure.cdr.amber.com.au/userinfo
+    registration: https://secure.cdr.amber.com.au/connect/register
+    jwks: https://public.cdr.amber.com.au/jwks
+  grant_types: [authorization_code, client_credentials, refresh_token]
+  response_types: [code]
+  response_modes: [jwt]
+  client_authentication: [private_key_jwt]
+  client_auth_signing_algs: [ES256, PS256]
+  id_token_signing_algs: [ES256]
+  request_object_signing_algs: [PS256]
+  pkce: [S256]
+  par_required: true
+  subject_types: [pairwise]
+  mtls_bound_tokens: true
+  acr_values: ['urn:cds.au:cdr:2']
+  claims: [name, given_name, family_name, sharing_duration, iss, sub, aud, acr, exp, iat, nonce, auth_time, updated_at]
+  scope_count: 16
+  scopes_detail: scopes/amber-electric-scopes.yml
+  gate: >-
+    ACCC accreditation as a CDR data recipient plus a software statement
+    assertion from the CDR Register. Unavailable to an unaccredited developer at
+    any price.

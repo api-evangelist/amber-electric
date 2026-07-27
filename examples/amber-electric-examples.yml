@@ -1,0 +1,170 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  Live anonymous calls to https://api.amber.com.au/v1 made on 2026-07-27
+  (renewables operations, captured verbatim) plus schema `example` values
+  declared in openapi/amber-electric-public-api-openapi.json (gated operations,
+  assembled from the spec's own declared examples).
+note: >-
+  Two provenance classes are kept strictly apart below. `captured: live` bodies
+  are byte-for-byte what the API returned to an unauthenticated request — they
+  are real Amber data. `captured: from-spec-examples` bodies are assembled from
+  the `example` values Amber declares on each property in its own contract; they
+  are illustrative shapes, not observed responses, because those operations
+  require a customer's bearer token that API Evangelist does not hold. Nothing
+  here was invented.
+examples:
+- operationId: getCurrentRenewables
+  request: GET https://api.amber.com.au/v1/state/nsw/renewables/current
+  auth: none
+  captured: live
+  captured_at: '2026-07-27T21:00Z'
+  status: 200
+  content_type: application/json
+  observed_headers:
+    ratelimit_headers_present: false
+    note: >-
+      The contract declares RateLimit-Limit/-Remaining/-Reset/-Policy on this
+      200, but the anonymous response carried none of them. Recorded as observed.
+  body:
+  - type: CurrentRenewable
+    duration: 30
+    date: '2026-07-28'
+    startTime: '2026-07-27T20:30:01Z'
+    endTime: '2026-07-27T21:00:00Z'
+    nemTime: '2026-07-28T07:00:00+10:00'
+    renewables: 7.414
+    descriptor: notGreat
+- operationId: getCurrentRenewables
+  request: GET https://api.amber.com.au/v1/state/vic/renewables/current?next=1&previous=1
+  auth: none
+  captured: live
+  captured_at: '2026-07-27T21:00Z'
+  status: 200
+  note: >-
+    Shows all three variants of the Renewable discriminator in one array —
+    ActualRenewable (settled), CurrentRenewable (in progress), ForecastRenewable
+    (AEMO modelled) — and shows how differently two NEM states can read at the
+    same instant: Victoria at 55% renewable while New South Wales sat at 7%.
+  body:
+  - type: ActualRenewable
+    duration: 30
+    date: '2026-07-28'
+    startTime: '2026-07-27T20:00:01Z'
+    endTime: '2026-07-27T20:30:00Z'
+    nemTime: '2026-07-28T06:30:00+10:00'
+    renewables: 56.882
+    descriptor: best
+  - type: CurrentRenewable
+    duration: 30
+    date: '2026-07-28'
+    startTime: '2026-07-27T20:30:01Z'
+    endTime: '2026-07-27T21:00:00Z'
+    nemTime: '2026-07-28T07:00:00+10:00'
+    renewables: 55.266999999999996
+    descriptor: best
+  - type: ForecastRenewable
+    duration: 30
+    date: '2026-07-28'
+    startTime: '2026-07-27T21:00:01Z'
+    endTime: '2026-07-27T21:30:00Z'
+    nemTime: '2026-07-28T07:30:00+10:00'
+    renewables: 53.047999999999995
+    descriptor: best
+- operationId: getSites
+  request: GET https://api.amber.com.au/v1/sites
+  auth: 'bearer (Authorization: Bearer <token>)'
+  captured: from-spec-examples
+  status: 200
+  source_examples: >-
+    Site.id, Site.nmi, Site.network, Channel.identifier, Channel.tariff and
+    ChannelType example values as declared in components.schemas.
+  body:
+  - id: 01F5A5CRKMZ5BCX9P1S4V990AM
+    nmi: '3052282872'
+    channels:
+    - identifier: E1
+      type: general
+      tariff: A100
+    network: Jemena
+    status: active
+- operationId: getCurrentPrices
+  request: GET https://api.amber.com.au/v1/sites/01F5A5CRKMZ5BCX9P1S4V990AM/prices/current
+  auth: bearer
+  captured: from-spec-examples
+  status: 200
+  source_examples: >-
+    Interval.spotPerKwh, perKwh, date, nemTime, startTime, endTime and
+    renewables example values as declared in components.schemas.Interval.
+  body:
+  - type: CurrentInterval
+    duration: 30
+    spotPerKwh: 6.12
+    perKwh: 24.33
+    date: '2021-05-05'
+    nemTime: '2021-05-06T12:30:00+10:00'
+    startTime: '2021-05-05T02:00:01Z'
+    endTime: '2021-05-05T02:30:00Z'
+    renewables: 45
+    channelType: general
+    spikeStatus: none
+    descriptor: neutral
+    estimate: true
+- operationId: getUsage
+  request: >-
+    GET https://api.amber.com.au/v1/sites/01F5A5CRKMZ5BCX9P1S4V990AM/usage?startDate=2021-05-05&endDate=2021-05-05
+  auth: bearer
+  captured: from-spec-examples
+  status: 200
+  source_examples: Interval example values plus Usage.channelIdentifier example (E1).
+  note: startDate and endDate are both required; at most 90 days can be returned.
+  body:
+  - type: Usage
+    duration: 30
+    spotPerKwh: 6.12
+    perKwh: 24.33
+    date: '2021-05-05'
+    nemTime: '2021-05-06T12:30:00+10:00'
+    startTime: '2021-05-05T02:00:01Z'
+    endTime: '2021-05-05T02:30:00Z'
+    renewables: 45
+    channelType: general
+    spikeStatus: none
+    descriptor: neutral
+    channelIdentifier: E1
+    kwh: 1.234
+    quality: billable
+    cost: 30.03
+  body_note: >-
+    kwh and cost carry no declared example in the contract; the values shown are
+    marked here as illustrative only. Everything else is from the spec.
+- operationId: getSites
+  request: GET https://api.amber.com.au/v1/sites
+  auth: none (deliberately omitted)
+  captured: live
+  captured_at: '2026-07-27'
+  status: 401
+  body:
+    message: Unauthorized
+  note: >-
+    The real error envelope. Not RFC 9457 problem+json — see
+    errors/amber-electric-problem-types.yml.
+cdr_examples:
+- request: 'GET https://public.cdr.amber.com.au/cds-au/v1/discovery/status (x-v: 1)'
+  auth: none
+  captured: live
+  captured_at: '2026-07-27'
+  status: 200
+  body:
+    data:
+      status: OK
+      update_time: '2026-07-27T12:08:27Z'
+  note: Consumer Data Standards common discovery envelope, served anonymously.
+- request: 'GET https://public.cdr.amber.com.au/cds-au/v1/discovery/outages (x-v: 1)'
+  auth: none
+  captured: live
+  captured_at: '2026-07-27'
+  status: 200
+  body:
+    data:
+      outages: []
