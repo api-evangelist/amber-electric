@@ -1,0 +1,450 @@
+aid: amber-electric
+name: Amber Electric
+review:
+  question: >-
+    Does the Australian Consumer Data Right — the same statutory mandate,
+    regulator and Data Standards Body that produced the identical fifty-bank
+    banking contract — actually produce a working, standards-conformant energy
+    API at Amber Electric, and is that separable from what Amber ships
+    voluntarily?
+  answer: true
+  date: '2026-07-27'
+  reviewer: API Evangelist
+  homeMarket: Australia
+  tier: utility-retailer
+  summary: >-
+    Yes, and both surfaces exist independently. Amber runs a verified-live CDR
+    energy data-holder implementation (mandated, accredited-only) AND a
+    self-authored public REST API with a real OpenAPI 3.0.0 contract
+    (voluntary, customer-account-required). The mandate was not simply claimed:
+    the CDR Register lists a working public base URI, and the Consumer Data
+    Standards discovery endpoints and the OpenID Connect configuration behind it
+    answered anonymously on the review date.
+
+mandate:
+  regime: cdr-energy
+  regimeVerbatim: >-
+    Consumer Data Right (Competition and Consumer Act 2010 Part IVD), extended
+    by designation from banking into the energy sector. Regulated by the ACCC,
+    with technical standards set by the Data Standards Body as the Consumer Data
+    Standards. AEMO acts as the designated gateway / secondary data holder for
+    standardised retailer-held metering and service-point data.
+  status: live-implemented
+  statusReasoning: >-
+    Recorded as live-implemented, not live-claimed-unverified, because the
+    evidence is an actual reachable surface rather than a compliance page or a
+    press release. Three independent confirmations were obtained on 2026-07-27,
+    all anonymously and all listed under `evidence` below: (1) the public ACCC
+    CDR Register returns an Amber energy data-holder brand record with a
+    populated publicBaseUri and a lastUpdated of 2026-07-23; (2) the Consumer
+    Data Standards discovery endpoints at that base URI return HTTP 200 with
+    conformant CDS envelopes; (3) the OpenID Connect discovery document at that
+    base URI is served anonymously and advertises the full CDS energy scope set.
+    No claim by Amber was relied on. Amber's own marketing site publishes no CDR
+    or consumer-data-right page at all — /cdr, /consumer-data-right,
+    /cdr-policy, /legal/cdr-policy and /data-sharing all returned 404 — so the
+    only evidence of the mandate being implemented is the machinery itself,
+    which is the strongest form of evidence available and the exact inverse of a
+    compliance-page-only posture.
+  registerEntry:
+    source: https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary
+    httpStatus: 200
+    fetched: '2026-07-27'
+    dataHolderBrandId: 54968899-b7b5-ef11-95f6-6045bd3f1493
+    interimId: dbfb4be7-27bf-4335-9d92-7e25f1bb8e2a
+    brandName: Amber
+    industries:
+    - energy
+    abn: '98623603805'
+    acn: '623603805'
+    publicBaseUri: https://public.cdr.amber.com.au
+    lastUpdated: '2026-07-23T04:54:26Z'
+    note: >-
+      Amber is one of 84 energy data-holder brands on the register as of the
+      fetch date, alongside AGL, Origin Energy, EnergyAustralia, Alinta, Shell
+      Energy, Red Energy, Powershop and others.
+  standardsConformance:
+    - endpoint: https://public.cdr.amber.com.au/cds-au/v1/discovery/status
+      method: GET
+      headers: 'x-v: 1'
+      httpStatus: 200
+      response: '{"data":{"status":"OK","update_time":"2026-07-27T12:08:27Z"},"links":{"self":"..."}}'
+      note: Conformant Consumer Data Standards common discovery response envelope.
+    - endpoint: https://public.cdr.amber.com.au/cds-au/v1/discovery/outages
+      method: GET
+      headers: 'x-v: 1'
+      httpStatus: 200
+      response: '{"data":{"outages":[]},"links":{"self":"..."}}'
+    - endpoint: https://public.cdr.amber.com.au/.well-known/openid-configuration
+      method: GET
+      httpStatus: 200
+      note: Served anonymously; saved verbatim to authentication/amber-electric-cdr-openid-configuration.json
+    - endpoint: https://public.cdr.amber.com.au/jwks
+      method: GET
+      httpStatus: 200
+  negativeFindings:
+    - probe: https://public.cdr.amber.com.au/cds-au/v1/energy/plans
+      httpStatus: 404
+      versionsTried: ['x-v: 1', 'x-v: 2', 'x-v: 3', 'no header']
+      interpretation: >-
+        NOT recorded as an Amber failure. The identical probe was run as a
+        control against five peer energy data holders taken from the same
+        register response — Arcline by RACV, Cooperative Power, RAA Energy,
+        Aurora Energy, Origin Energy and AGL — and every one of them also
+        returned 404 on /cds-au/v1/energy/plans at its registered publicBaseUri.
+        A uniform 404 across the whole cohort means retailer public base URIs in
+        CDR energy are not where generic product reference data is served, so
+        the absence says nothing about Amber specifically. Recorded here so the
+        404 is not later mistaken for a compliance gap.
+    - probe: https://amber.com.au/cdr
+      httpStatus: 404
+    - probe: https://amber.com.au/consumer-data-right
+      httpStatus: 404
+    - probe: https://amber.com.au/cdr-policy
+      httpStatus: 404
+    - probe: https://amber.com.au/data-sharing
+      httpStatus: 404
+      interpretation: >-
+        Amber publishes no consumer-facing CDR explainer or CDR policy page that
+        could be found. The mandate is implemented in machinery but invisible in
+        marketing — the opposite of the common pattern where a compliance page
+        exists and the endpoint does not.
+
+dataStandard:
+  primary: Consumer Data Standards (Australia) — energy schemas, /cds-au/v1
+  version: >-
+    CDS common discovery endpoints answered on x-v: 1. No single CDS release
+    version is advertised by the data holder, so no version number is asserted.
+  secondary: >-
+    OpenAPI 3.0.0 for Amber's own voluntary public API (self-authored, not a
+    sector data standard).
+  notFound:
+    - Green Button / ESPI — no reference found anywhere on Amber's surfaces
+    - OpenADR — no reference found
+    - IEEE 2030.5 — no reference found
+    - IEC CIM 61968/61970 — no reference found
+    - OCPP / OCPI — no reference found despite Amber's EV and battery products
+  note: >-
+    Amber's own public API uses a proprietary resource shape (Site, Interval,
+    ActualInterval, ForecastInterval, CurrentInterval, Usage, Renewable,
+    TariffInformation, Channel) described with OpenAPI. It maps to no energy
+    sector data standard. The standardised shape at Amber exists only where the
+    mandate put it, under /cds-au/v1.
+
+consumerVsMarketData:
+  finding: >-
+    The split is the headline, and at Amber it is unusually sharp because it
+    runs THROUGH a single OpenAPI contract rather than between two products.
+    Open market data and gated consumer data are neighbours in the same
+    document.
+  consumerDataApi: true
+  consumerDataDetail: >-
+    Available by two separate routes. (1) Mandated: the CDR energy data-holder
+    surface, where an accredited data recipient with consumer consent can obtain
+    account, billing, concession, service-point, usage and DER data. (2)
+    Voluntary: Amber's own API, where an Amber customer can read their own
+    sites, half-hourly actual/current/forecast prices, and usage with a
+    self-issued bearer token. Route 1 is third-party access under statute; route
+    2 is first-party access to your own account only.
+  marketDataOpen: true
+  marketDataDetail: >-
+    GET https://api.amber.com.au/v1/state/{state}/renewables/current returns the
+    current renewables percentage for a National Electricity Market state with
+    NO credential at all. Confirmed 200 anonymously for nsw, vic, qld and sa on
+    2026-07-27; the NSW call returned a CurrentRenewable object with
+    renewables 3.153, descriptor "worst", 30-minute duration and a nemTime. This
+    is not an accident of a misconfigured gateway — the published OpenAPI
+    declares `security: []` on that one operation while declaring
+    `security: [{apiKey: []}]` on all four others. The openness is deliberate
+    and contractual.
+  provenOpposition:
+    - call: GET https://api.amber.com.au/v1/state/nsw/renewables/current (no auth)
+      httpStatus: 200
+    - call: GET https://api.amber.com.au/v1/sites (no auth)
+      httpStatus: 401
+      body: '{"message":"Unauthorized"}'
+  note: >-
+    Amber is a retailer, not a market operator, so it publishes no wholesale
+    price or system dispatch feed of its own — AEMO holds that role for the NEM.
+    What Amber opens is a derived grid signal, and it opens it completely.
+
+accessGate:
+  gate: customer-account-required
+  gateReasoning: >-
+    Recorded as customer-account-required rather than self-serve because
+    https://app.amber.com.au/developers returns HTTP 200 but is a Next.js
+    single-page application served inside Amber's logged-in customer app, marked
+    noindex,nofollow, with no anonymous content. The token is minted by logging
+    into the customer app, opening the Developers tab, switching on Developers
+    Mode and clicking "Generate a new token" — which requires an active Amber
+    electricity account, i.e. being a paying customer in a serviced Australian
+    postcode. There is no developer signup, no sandbox, no trial key and no
+    application form. This is NOT a self-serve developer portal and should not
+    be counted as one.
+  whatADeveloperMustDo:
+    - >-
+      For the open renewables endpoint: nothing. Call
+      GET https://api.amber.com.au/v1/state/{state}/renewables/current directly.
+    - >-
+      For the rest of Amber's own API: become an Amber Electric customer at an
+      Australian address Amber services, log in to https://app.amber.com.au,
+      open the Developers tab, enable Developers Mode, generate a token, and
+      send it as `Authorization: Bearer <token>`.
+    - >-
+      For the CDR energy surface: become an ACCC-accredited CDR data recipient,
+      obtain a software statement assertion from the CDR Register, dynamically
+      register a client at https://secure.cdr.amber.com.au/connect/register, and
+      drive an authorization-code flow with PAR and private_key_jwt under an
+      individual consumer's consent. Unavailable to an unaccredited developer at
+      any price.
+  secondaryGate: accredited-only
+  secondaryGateNote: >-
+    Two gates coexist at this company. The voluntary API is gated on being a
+    CUSTOMER; the mandated API is gated on being ACCREDITED. Neither is
+    self-serve. Recording only one would misrepresent the provider.
+
+authModel:
+  ownApi:
+    scheme: HTTP Bearer token
+    declaredAs: 'components.securitySchemes.apiKey → {type: http, scheme: bearer}'
+    issuedBy: Amber customer web app, Developers tab
+    scopes: none — the token is unscoped and grants read access to the account's own sites
+    perOperation: >-
+      4 of 5 operations require it; GET /state/{state}/renewables/current
+      explicitly overrides with `security: []`.
+  cdrApi:
+    scheme: OpenID Connect / OAuth 2.0 (FAPI-style CDR profile)
+    issuer: https://public.cdr.amber.com.au
+    authorizationEndpoint: https://public.cdr.amber.com.au/connect/authorize
+    tokenEndpoint: https://secure.cdr.amber.com.au/connect/token
+    registrationEndpoint: https://secure.cdr.amber.com.au/connect/register
+    pushedAuthorizationRequestEndpoint: https://secure.cdr.amber.com.au/connect/par
+    introspectionEndpoint: https://secure.cdr.amber.com.au/connect/introspect
+    userinfoEndpoint: https://secure.cdr.amber.com.au/userinfo
+    jwksUri: https://public.cdr.amber.com.au/jwks
+    tokenEndpointAuthMethodsSupported:
+    - private_key_jwt
+    responseTypesSupported:
+    - code
+    grantTypesSupported:
+    - authorization_code
+    - client_credentials
+    - refresh_token
+    scopesSupported:
+    - openid
+    - profile
+    - common:customer.basic:read
+    - common:customer.detail:read
+    - cdr:registration
+    - admin:metrics.basic:read
+    - admin:metadata:update
+    - energy:electricity.servicepoints.basic:read
+    - energy:electricity.servicepoints.detail:read
+    - energy:electricity.usage:read
+    - energy:electricity.der:read
+    - energy:accounts.basic:read
+    - energy:accounts.detail:read
+    - energy:accounts.paymentschedule:read
+    - energy:accounts.concessions:read
+    - energy:billing:read
+    claimsSupported:
+    - name
+    - given_name
+    - family_name
+    - sharing_duration
+    - iss
+    - sub
+    - aud
+    - acr
+    - exp
+    - iat
+    - nonce
+    - auth_time
+    - updated_at
+    scopeNote: >-
+      Every scope above was read verbatim from the anonymously-served discovery
+      document; none was inferred or invented. The presence of the full
+      energy:electricity.servicepoints / usage / der set alongside
+      energy:accounts and energy:billing is the signature of a complete CDS
+      energy data-holder build rather than a partial one.
+
+harvestedArtifacts:
+- path: openapi/amber-electric-public-api-openapi.json
+  type: OpenAPI
+  specVersion: 3.0.0
+  sourceURL: https://raw.githubusercontent.com/amberelectric/public-api/main/swagger.json
+  httpStatus: 200
+  fetched: '2026-07-27'
+  bytes: 33727
+  parsed: true
+  parseMethod: python3 json.load
+  verbatim: true
+  title: Amber Electric Public API
+  infoVersion: '1.0'
+  servers:
+  - https://api.amber.com.au/v1
+  operations:
+  - GET /state/{state}/renewables/current (getCurrentRenewables) — security []
+  - GET /sites (getSites) — security [apiKey]
+  - GET /sites/{siteId}/prices (getPrices) — security [apiKey]
+  - GET /sites/{siteId}/prices/current (getCurrentPrices) — security [apiKey]
+  - GET /sites/{siteId}/usage (getUsage) — security [apiKey]
+  schemas:
+  - Channel
+  - Site
+  - SpikeStatus
+  - PriceDescriptor
+  - RenewableDescriptor
+  - ChannelType
+  - Range
+  - TariffInformation
+  - Interval
+  - ActualInterval
+  - ForecastInterval
+  - CurrentInterval
+  - Usage
+  - Renewable
+  - ActualRenewable
+  - ForecastRenewable
+  - CurrentRenewable
+  provenanceNote: >-
+    Amber publishes this contract itself in its own GitHub organisation
+    (github.com/amberelectric/public-api, repository description "Discuss the
+    Amber public API"). It was copied byte-for-byte with no edits, normalisation
+    or regeneration.
+- path: authentication/amber-electric-cdr-openid-configuration.json
+  type: OpenIDConnectDiscovery
+  sourceURL: https://public.cdr.amber.com.au/.well-known/openid-configuration
+  httpStatus: 200
+  fetched: '2026-07-27'
+  parsed: true
+  parseMethod: python3 json.load
+  verbatim: true
+  anonymous: true
+  provenanceNote: >-
+    Fetched with no credentials of any kind. This document is the primary
+    evidence that the CDR energy mandate is implemented rather than merely
+    designated at this retailer.
+
+probeLog:
+- url: https://amber.com.au/
+  httpStatus: 200
+- url: https://app.amber.com.au/developers
+  httpStatus: 200
+  note: SPA shell inside the logged-in customer app; noindex,nofollow; no anonymous content
+- url: https://app.amber.com.au/developers/documentation
+  httpStatus: 200
+  note: Same SPA shell; renders client-side, requires the customer app session
+- url: https://api.amber.com.au/v1/state/nsw/renewables/current
+  httpStatus: 200
+  note: ANONYMOUS — returned live CurrentRenewable payload
+- url: https://api.amber.com.au/v1/state/vic/renewables/current
+  httpStatus: 200
+- url: https://api.amber.com.au/v1/state/qld/renewables/current
+  httpStatus: 200
+- url: https://api.amber.com.au/v1/state/sa/renewables/current
+  httpStatus: 200
+- url: https://api.amber.com.au/v1/sites
+  httpStatus: 401
+  note: '{"message":"Unauthorized"} — consumer data is gated'
+- url: https://api.amber.com.au/
+  httpStatus: 403
+- url: https://api.amber.com.au/v1
+  httpStatus: 403
+- url: https://api.amber.com.au/v1/openapi.json
+  httpStatus: 403
+- url: https://api.amber.com.au/openapi.json
+  httpStatus: 403
+- url: https://api.amber.com.au/swagger.json
+  httpStatus: 403
+- url: https://api.amber.com.au/.well-known/openid-configuration
+  httpStatus: 403
+- url: https://developer.amber.com.au/
+  httpStatus: 000
+  note: DNS does not resolve
+- url: https://developers.amber.com.au/
+  httpStatus: 000
+  note: DNS does not resolve
+- url: https://docs.amber.com.au/
+  httpStatus: 000
+  note: DNS does not resolve
+- url: https://cdr.amber.com.au/
+  httpStatus: 000
+  note: DNS does not resolve — the CDR host is public.cdr.amber.com.au
+- url: https://amber.com.au/developers
+  httpStatus: 404
+- url: https://amber.com.au/api
+  httpStatus: 404
+- url: https://amber.com.au/docs
+  httpStatus: 404
+- url: https://amber.com.au/data
+  httpStatus: 404
+- url: https://amber.com.au/.well-known/security.txt
+  httpStatus: 404
+- url: https://amber.com.au/security
+  httpStatus: 404
+- url: https://amber.com.au/blog
+  httpStatus: 200
+- url: https://amber.com.au/privacy
+  httpStatus: 200
+- url: https://amber.com.au/how-it-works
+  httpStatus: 200
+- url: https://help.amber.com.au/
+  httpStatus: 403
+  note: Zendesk help centre; blocks automated clients but is publicly reachable in a browser
+- url: https://status.amber.com.au/
+  httpStatus: 000
+  note: DNS does not resolve — no public status page found
+- url: https://public.cdr.amber.com.au/cds-au/v1/discovery/status
+  httpStatus: 200
+- url: https://public.cdr.amber.com.au/cds-au/v1/discovery/outages
+  httpStatus: 200
+- url: https://public.cdr.amber.com.au/.well-known/openid-configuration
+  httpStatus: 200
+- url: https://public.cdr.amber.com.au/jwks
+  httpStatus: 200
+- url: https://public.cdr.amber.com.au/cds-au/v1/energy/plans
+  httpStatus: 404
+  note: Also 404 across six peer retailers — see mandate.negativeFindings
+- url: https://public.cdr.amber.com.au/cds-au/v1/common/customer
+  httpStatus: 404
+  note: Expected — authenticated resource, not on the public base URI
+- url: https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary
+  httpStatus: 200
+  note: 84 energy data-holder brands returned; Amber present
+- url: https://api.github.com/search/repositories?q=org:amberelectric
+  httpStatus: 200
+  note: 4 public repositories; public-api holds swagger.json
+
+sources:
+- url: https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary
+  type: Registry
+  note: ACCC CDR Register — authoritative proof of designation AND of a live public base URI.
+- url: https://public.cdr.amber.com.au/.well-known/openid-configuration
+  type: OpenIDConnectDiscovery
+  note: Anonymously served; authoritative proof of a built CDS energy authorization server.
+- url: https://github.com/amberelectric/public-api
+  type: SourceCode
+  note: Amber's own repository publishing swagger.json, the OpenAPI 3.0.0 contract for api.amber.com.au/v1.
+- url: https://raw.githubusercontent.com/amberelectric/public-api/main/swagger.json
+  type: OpenAPI
+  note: The harvested contract itself.
+- url: https://app.amber.com.au/developers
+  type: Documentation
+  note: Where a customer generates a bearer token. Not a self-serve developer portal.
+- url: https://amber.com.au/
+  type: Website
+  note: Business model — wholesale NEM pricing passed through on a monthly membership, battery and solar automation.
+- url: https://consumerdatastandardsaustralia.github.io/standards/
+  type: Documentation
+  note: The Data Standards Body specification the CDR surface conforms to.
+
+notFabricated:
+  statement: >-
+    Nothing in this profile was invented. Every host, endpoint, scope, status
+    code and identifier recorded here was either returned by a live HTTP request
+    made on 2026-07-27 or copied verbatim from a document fetched on that date.
+    No Green Button, ESPI, OpenADR, IEEE 2030.5, IEC CIM, OCPP or OCPI
+    conformance is claimed because none was found. No CDR product reference data
+    endpoint is claimed because the probe returned 404. No self-serve developer
+    portal is claimed because none exists.
