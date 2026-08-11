@@ -117,6 +117,11 @@ apis:
   - type: OAuthScopes
     url: scopes/amber-electric-scopes.yml
 common:
+- type: IssueTracker
+  url: https://github.com/amberelectric/public-api/issues
+- type: License
+  name: MIT
+  url: https://github.com/amberelectric/public-api/blob/main/LICENSE
 - type: AgenticAccess
   url: agentic-access/amber-electric-agentic-access.yml
 - type: DomainSecurity
