@@ -2,33 +2,33 @@ generated: '2026-07-27'
 method: derived
 status: candidate
 source: openapi/amber-electric-public-api-openapi.json
-search_note: >-
-  No first-party MCP server exists. Searched the official Model Context Protocol
-  registry (registry.modelcontextprotocol.io — the "amber" hits are the
-  unrelated ambermem memory server), npm, and the amberelectric GitHub
-  organisation on 2026-07-27. Amber publishes no hosted or remote MCP endpoint
-  and no MCP documentation. One third-party server exists and is recorded below.
-  The tools[] list is DERIVED one-to-one from the five operations in Amber's own
-  published OpenAPI — it is a candidate design, not something Amber ships.
+search_note: No first-party MCP server exists. Searched the official Model Context Protocol registry (registry.modelcontextprotocol.io
+  — the "amber" hits are the unrelated ambermem memory server), npm, and the amberelectric GitHub organisation
+  on 2026-07-27. Amber publishes no hosted or remote MCP endpoint and no MCP documentation. One third-party
+  server exists and is recorded below. The tools[] list is DERIVED one-to-one from the five operations
+  in Amber's own published OpenAPI — it is a candidate design, not something Amber ships.
 server:
   name: amber-electric
   published: false
   transport: null
   url: null
-  note: >-
-    A candidate server would front https://api.amber.com.au/v1 and pass through
-    the customer's bearer token. Only get_current_renewables can run without a
-    credential.
+  note: A candidate server would front https://api.amber.com.au/v1 and pass through the customer's bearer
+    token. Only get_current_renewables can run without a credential.
 tools:
 - name: get_current_renewables
-  description: >-
-    Current, forecast and actual renewable-energy percentage of the grid for a
-    National Electricity Market state (nsw, sa, qld, vic).
+  description: Current, forecast and actual renewable-energy percentage of the grid for a National Electricity
+    Market state (nsw, sa, qld, vic).
   source_operation: openapi/amber-electric-public-api-openapi.json#getCurrentRenewables
   method: GET
   path: /state/{state}/renewables/current
   auth: none
-  inputs_from_spec: [state (path, required), next (query), previous (query), resolution (query, 5|30)]
+  inputs_from_spec:
+  - state (path
+  - required)
+  - next (query)
+  - previous (query)
+  - resolution (query
+  - 5|30)
 - name: list_sites
   description: List the sites (NMIs and meter channels) linked to the authenticated Amber account.
   source_operation: openapi/amber-electric-public-api-openapi.json#getSites
@@ -37,32 +37,53 @@ tools:
   auth: bearer
   inputs_from_spec: []
 - name: get_prices
-  description: >-
-    Half-hourly or five-minute prices for a site across a date range, mixing
-    actual, current and forecast intervals.
+  description: Half-hourly or five-minute prices for a site across a date range, mixing actual, current
+    and forecast intervals.
   source_operation: openapi/amber-electric-public-api-openapi.json#getPrices
   method: GET
   path: /sites/{siteId}/prices
   auth: bearer
-  inputs_from_spec: [siteId (path, required), startDate (query, date), endDate (query, date), resolution (query, 5|30)]
+  inputs_from_spec:
+  - siteId (path
+  - required)
+  - startDate (query
+  - date)
+  - endDate (query
+  - date)
+  - resolution (query
+  - 5|30)
 - name: get_current_prices
-  description: >-
-    The current price on every channel for a site, optionally with N previous
-    actual and N next forecast intervals.
+  description: The current price on every channel for a site, optionally with N previous actual and N
+    next forecast intervals.
   source_operation: openapi/amber-electric-public-api-openapi.json#getCurrentPrices
   method: GET
   path: /sites/{siteId}/prices/current
   auth: bearer
-  inputs_from_spec: [siteId (path, required), next (query), previous (query), resolution (query, 30)]
+  inputs_from_spec:
+  - siteId (path
+  - required)
+  - next (query)
+  - previous (query)
+  - resolution (query
+  - 30)
 - name: get_usage
-  description: >-
-    Interval consumption and generation for a site with cost and data quality,
-    up to 90 days per call.
+  description: Interval consumption and generation for a site with cost and data quality, up to 90 days
+    per call.
   source_operation: openapi/amber-electric-public-api-openapi.json#getUsage
   method: GET
   path: /sites/{siteId}/usage
   auth: bearer
-  inputs_from_spec: [siteId (path, required), startDate (query, date, required), endDate (query, date, required), resolution (query, 30)]
+  inputs_from_spec:
+  - siteId (path
+  - required)
+  - startDate (query
+  - date
+  - required)
+  - endDate (query
+  - date
+  - required)
+  - resolution (query
+  - 30)
 agent_notes:
   read_only: true
   write_operations: 0
@@ -80,8 +101,12 @@ third_party_servers:
   repository: https://github.com/malamutemayhem/unclick
   transport: stdio
   install: npx @unclick/amber-mcp
-  description: >-
-    "Real-time Australian electricity spot prices and renewables data from Amber
-    Electric" — registry description, verbatim. Not published, endorsed or
-    documented by Amber. Its tool list was not introspected, so no tool schemas
-    are recorded here.
+  description: '"Real-time Australian electricity spot prices and renewables data from Amber Electric"
+    — registry description, verbatim. Not published, endorsed or documented by Amber. Its tool list was
+    not introspected, so no tool schemas are recorded here.'
+deployment:
+  mode: none
+  verified: derived
+  tools: 5
+  checked: '2026-08-12'
+  source: catalog MCP census

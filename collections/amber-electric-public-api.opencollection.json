@@ -1,0 +1,185 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Amber Electric Public API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "getCurrentRenewables",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://api.amber.com.au/v1/state/:state/renewables/current",
+        "params": [
+          {
+            "name": "state",
+            "value": "",
+            "type": "path",
+            "description": "State you would like the renewables for. Valid states: nsw, sa, qld, vic"
+          },
+          {
+            "name": "next",
+            "value": "",
+            "type": "query",
+            "description": "Return the _next_ number of forecast intervals"
+          },
+          {
+            "name": "previous",
+            "value": "",
+            "type": "query",
+            "description": "Return the _previous_ number of actual intervals."
+          },
+          {
+            "name": "resolution",
+            "value": "",
+            "type": "query",
+            "description": "Specify the required interval duration resolution. Valid options: 5, 30. Default: 30"
+          }
+        ]
+      },
+      "docs": "Returns the current percentage of renewables in the grid"
+    },
+    {
+      "info": {
+        "name": "getSites",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://api.amber.com.au/v1/sites",
+        "auth": {
+          "type": "bearer",
+          "token": "{{bearerToken}}"
+        }
+      },
+      "docs": "Return all sites linked to your account"
+    },
+    {
+      "info": {
+        "name": "getPrices",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://api.amber.com.au/v1/sites/:siteId/prices",
+        "params": [
+          {
+            "name": "siteId",
+            "value": "",
+            "type": "path",
+            "description": "ID of the site you are fetching prices for. Can be found using the `/sites` endpoint"
+          },
+          {
+            "name": "startDate",
+            "value": "2021-05-05",
+            "type": "query",
+            "description": "Return all prices for each interval on and after this day. Defaults to today."
+          },
+          {
+            "name": "endDate",
+            "value": "2021-05-05",
+            "type": "query",
+            "description": "Return all prices for each interval on and before this day. Defaults to today."
+          },
+          {
+            "name": "resolution",
+            "value": "",
+            "type": "query",
+            "description": "Specify the required interval duration resolution. Valid options: 5, 30. Default: 30"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "token": "{{bearerToken}}"
+        }
+      },
+      "docs": "Returns all the prices between the start and end dates"
+    },
+    {
+      "info": {
+        "name": "getCurrentPrices",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://api.amber.com.au/v1/sites/:siteId/prices/current",
+        "params": [
+          {
+            "name": "siteId",
+            "value": "",
+            "type": "path",
+            "description": "ID of the site you are fetching prices for. Can be found using the `/sites` enpoint"
+          },
+          {
+            "name": "next",
+            "value": "",
+            "type": "query",
+            "description": "Return the _next_ number of forecast intervals"
+          },
+          {
+            "name": "previous",
+            "value": "",
+            "type": "query",
+            "description": "Return the _previous_ number of actual intervals."
+          },
+          {
+            "name": "resolution",
+            "value": "",
+            "type": "query",
+            "description": "Specify the required interval duration resolution. Valid options: 30. Default: 30"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "token": "{{bearerToken}}"
+        }
+      },
+      "docs": "Returns the current price"
+    },
+    {
+      "info": {
+        "name": "getUsage",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://api.amber.com.au/v1/sites/:siteId/usage",
+        "params": [
+          {
+            "name": "siteId",
+            "value": "",
+            "type": "path",
+            "description": "ID of the site you are fetching usage for. Can be found using the `/sites` enpoint"
+          },
+          {
+            "name": "startDate",
+            "value": "2021-05-05",
+            "type": "query",
+            "description": "Return all usage for each interval on and after this day."
+          },
+          {
+            "name": "endDate",
+            "value": "2021-05-05",
+            "type": "query",
+            "description": "Return all usage for each interval on and before this day."
+          },
+          {
+            "name": "resolution",
+            "value": "",
+            "type": "query",
+            "description": "Specify the required interval duration resolution. Valid options: 30. Default: 30"
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "token": "{{bearerToken}}"
+        }
+      },
+      "docs": "Returns all usage data between the start and end dates. The API can only return 90-days worth of data."
+    }
+  ],
+  "bundled": true
+}

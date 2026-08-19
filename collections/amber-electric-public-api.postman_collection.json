@@ -1,0 +1,1752 @@
+{
+  "item": [
+    {
+      "id": "019cedb6-db61-4899-81e0-3f3f76fca111",
+      "name": "get Current Renewables",
+      "request": {
+        "name": "get Current Renewables",
+        "description": {
+          "content": "Returns the current percentage of renewables in the grid",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "state",
+            ":state",
+            "renewables",
+            "current"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [
+            {
+              "disabled": false,
+              "key": "next",
+              "value": "<integer>",
+              "description": "Return the _next_ number of forecast intervals"
+            },
+            {
+              "disabled": false,
+              "key": "previous",
+              "value": "<integer>",
+              "description": "Return the _previous_ number of actual intervals."
+            },
+            {
+              "disabled": false,
+              "key": "resolution",
+              "value": "30",
+              "description": "Specify the required interval duration resolution. Valid options: 5, 30. Default: 30"
+            }
+          ],
+          "variable": [
+            {
+              "disabled": false,
+              "type": "any",
+              "value": "<string>",
+              "key": "state",
+              "description": "(Required) State you would like the renewables for. Valid states: nsw, sa, qld, vic"
+            }
+          ]
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "GET",
+        "auth": null
+      },
+      "response": [
+        {
+          "id": "13d2be1b-4c26-4956-b4c1-76a366e4f628",
+          "name": "The current percentage of renewables in the grid.",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "state",
+                ":state",
+                "renewables",
+                "current"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "next",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "previous",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "state",
+                  "description": "(Required) State you would like the renewables for. Valid states: nsw, sa, qld, vic"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "disabled": false,
+              "description": "The number of requests allowed per rate limit window",
+              "key": "RateLimit-Limit",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The remaining quota in the current rate limit window",
+              "key": "RateLimit-Remaining",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The number of seconds until the rate limit window resets",
+              "key": "RateLimit-Reset",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The rate limit policy.<br>See <a href=\"https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/\" target=\"_blank\" rel=\"noopener noreferrer\">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>",
+              "key": "RateLimit-Policy",
+              "value": "string"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[\n  {\n    \"type\": \"ActualRenewable\",\n    \"duration\": 5,\n    \"date\": \"2021-05-05\",\n    \"nemTime\": \"2021-05-06T12:30:00+10:00\",\n    \"startTime\": \"2021-05-05T02:00:01Z\",\n    \"endTime\": \"2021-05-05T02:30:00Z\",\n    \"renewables\": 45,\n    \"descriptor\": \"notGreat\"\n  },\n  {\n    \"type\": \"ActualRenewable\",\n    \"duration\": 5,\n    \"date\": \"2021-05-05\",\n    \"nemTime\": \"2021-05-06T12:30:00+10:00\",\n    \"startTime\": \"2021-05-05T02:00:01Z\",\n    \"endTime\": \"2021-05-05T02:30:00Z\",\n    \"renewables\": 45,\n    \"descriptor\": \"best\"\n  }\n]",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "52e51e1d-050d-4ba9-8e4f-3d062590ee8b",
+          "name": "Bad request",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "state",
+                ":state",
+                "renewables",
+                "current"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "next",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "previous",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "state",
+                  "description": "(Required) State you would like the renewables for. Valid states: nsw, sa, qld, vic"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "89c0cc8d-7cd2-483f-9662-5eb23c6fd39d",
+          "name": "State not found",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "state",
+                ":state",
+                "renewables",
+                "current"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "next",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "previous",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "state",
+                  "description": "(Required) State you would like the renewables for. Valid states: nsw, sa, qld, vic"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "2e37afc1-17d9-4ed0-b554-3274df9b16a2",
+          "name": "Internal Server Error",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "state",
+                ":state",
+                "renewables",
+                "current"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "next",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "previous",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "state",
+                  "description": "(Required) State you would like the renewables for. Valid states: nsw, sa, qld, vic"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    },
+    {
+      "id": "1c9b02a0-5fa8-4cab-85d3-6ce886c93be4",
+      "name": "get Sites",
+      "request": {
+        "name": "get Sites",
+        "description": {
+          "content": "Return all sites linked to your account",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "sites"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{bearerToken}}"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "id": "9352ba0a-c076-47ce-98b2-646cd788f35f",
+          "name": "A list of sites.",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "disabled": false,
+              "description": "The number of requests allowed per rate limit window",
+              "key": "RateLimit-Limit",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The remaining quota in the current rate limit window",
+              "key": "RateLimit-Remaining",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The number of seconds until the rate limit window resets",
+              "key": "RateLimit-Reset",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The rate limit policy.<br>See <a href=\"https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/\" target=\"_blank\" rel=\"noopener noreferrer\">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>",
+              "key": "RateLimit-Policy",
+              "value": "string"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[\n  {\n    \"id\": \"01F5A5CRKMZ5BCX9P1S4V990AM\",\n    \"nmi\": \"3052282872\",\n    \"channels\": [\n      {\n        \"identifier\": \"E1\",\n        \"type\": \"general\",\n        \"tariff\": \"A100\"\n      },\n      {\n        \"identifier\": \"E1\",\n        \"type\": \"general\",\n        \"tariff\": \"A100\"\n      }\n    ],\n    \"network\": \"Jemena\",\n    \"status\": \"active\",\n    \"activeFrom\": \"2022-01-01\",\n    \"closedOn\": \"2022-05-01\"\n  },\n  {\n    \"id\": \"01F5A5CRKMZ5BCX9P1S4V990AM\",\n    \"nmi\": \"3052282872\",\n    \"channels\": [\n      {\n        \"identifier\": \"E1\",\n        \"type\": \"general\",\n        \"tariff\": \"A100\"\n      },\n      {\n        \"identifier\": \"E1\",\n        \"type\": \"general\",\n        \"tariff\": \"A100\"\n      }\n    ],\n    \"network\": \"Jemena\",\n    \"status\": \"active\",\n    \"activeFrom\": \"2022-01-01\",\n    \"closedOn\": \"2022-05-01\"\n  }\n]",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "dd652bf4-9bcf-42d6-b972-4092f36becdc",
+          "name": "API key is missing or invalid",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "da64a234-a577-423e-b532-f3b52dd7eade",
+          "name": "Internal Server Error",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    },
+    {
+      "id": "e3833498-a9fc-4a75-bda6-279c6417e261",
+      "name": "get Prices",
+      "request": {
+        "name": "get Prices",
+        "description": {
+          "content": "Returns all the prices between the start and end dates",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "sites",
+            ":siteId",
+            "prices"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [
+            {
+              "disabled": false,
+              "key": "startDate",
+              "value": "<date>",
+              "description": "Return all prices for each interval on and after this day. Defaults to today."
+            },
+            {
+              "disabled": false,
+              "key": "endDate",
+              "value": "<date>",
+              "description": "Return all prices for each interval on and before this day. Defaults to today."
+            },
+            {
+              "disabled": false,
+              "key": "resolution",
+              "value": "30",
+              "description": "Specify the required interval duration resolution. Valid options: 5, 30. Default: 30"
+            }
+          ],
+          "variable": [
+            {
+              "disabled": false,
+              "type": "any",
+              "value": "<string>",
+              "key": "siteId",
+              "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` endpoint"
+            }
+          ]
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{bearerToken}}"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "id": "ae430700-fd60-4dfd-a18b-892e547565c2",
+          "name": "A list of priced intervals<br><br>Return Order: General > Controlled Load > Feed In.<br><br>**NOTE**: If a channel is added or removed the index offset will change. It is best to filter or group the array by channel type.",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "prices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "disabled": false,
+              "description": "The number of requests allowed per rate limit window",
+              "key": "RateLimit-Limit",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The remaining quota in the current rate limit window",
+              "key": "RateLimit-Remaining",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The number of seconds until the rate limit window resets",
+              "key": "RateLimit-Reset",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The rate limit policy.<br>See <a href=\"https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/\" target=\"_blank\" rel=\"noopener noreferrer\">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>",
+              "key": "RateLimit-Policy",
+              "value": "string"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[\n  {\n    \"type\": \"ActualInterval\",\n    \"duration\": 30,\n    \"spotPerKwh\": 6.12,\n    \"perKwh\": 24.33,\n    \"date\": \"2021-05-05\",\n    \"nemTime\": \"2021-05-06T12:30:00+10:00\",\n    \"startTime\": \"2021-05-05T02:00:01Z\",\n    \"endTime\": \"2021-05-05T02:30:00Z\",\n    \"renewables\": 45,\n    \"channelType\": \"general\",\n    \"spikeStatus\": \"none\",\n    \"descriptor\": \"neutral\",\n    \"tariffInformation\": {\n      \"period\": \"offPeak\",\n      \"season\": \"default\",\n      \"block\": 1.4403446023826971,\n      \"demandWindow\": true\n    }\n  },\n  {\n    \"type\": \"ActualInterval\",\n    \"duration\": 5,\n    \"spotPerKwh\": 6.12,\n    \"perKwh\": 24.33,\n    \"date\": \"2021-05-05\",\n    \"nemTime\": \"2021-05-06T12:30:00+10:00\",\n    \"startTime\": \"2021-05-05T02:00:01Z\",\n    \"endTime\": \"2021-05-05T02:30:00Z\",\n    \"renewables\": 45,\n    \"channelType\": \"general\",\n    \"spikeStatus\": \"potential\",\n    \"descriptor\": \"veryLow\",\n    \"tariffInformation\": {\n      \"period\": \"peak\",\n      \"season\": \"winter\",\n      \"block\": 1.1444178058592556,\n      \"demandWindow\": false\n    }\n  }\n]",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "99b011f4-361c-42fc-a688-bff555e2f6b7",
+          "name": "Bad request",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "prices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "11ec8394-7c04-4e68-99b3-3f998c42b70b",
+          "name": "API key is missing or invalid",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "prices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "e504f265-2594-48ee-9aed-98ca2479cc36",
+          "name": "Site not found",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "prices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "efc6640e-f3c3-4c23-92e6-7937a5e023f0",
+          "name": "Internal Server Error",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "prices"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    },
+    {
+      "id": "b9b62ff2-455d-47b5-b9ad-2f9170ea8ddb",
+      "name": "get Current Prices",
+      "request": {
+        "name": "get Current Prices",
+        "description": {
+          "content": "Returns the current price",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "sites",
+            ":siteId",
+            "prices",
+            "current"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [
+            {
+              "disabled": false,
+              "key": "next",
+              "value": "<integer>",
+              "description": "Return the _next_ number of forecast intervals"
+            },
+            {
+              "disabled": false,
+              "key": "previous",
+              "value": "<integer>",
+              "description": "Return the _previous_ number of actual intervals."
+            },
+            {
+              "disabled": false,
+              "key": "resolution",
+              "value": "30",
+              "description": "Specify the required interval duration resolution. Valid options: 30. Default: 30"
+            }
+          ],
+          "variable": [
+            {
+              "disabled": false,
+              "type": "any",
+              "value": "<string>",
+              "key": "siteId",
+              "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` enpoint"
+            }
+          ]
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{bearerToken}}"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "id": "7f36ddc4-e207-428d-9e03-d24af9396317",
+          "name": "The current price on all channels.<br><br>Return Order: General > Controlled Load > Feed In.<br><br>**NOTE**: If a channel is added or removed the index offset will change. It is best to filter or group the array by channel type.",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "prices",
+                "current"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "next",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "previous",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` enpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "disabled": false,
+              "description": "The number of requests allowed per rate limit window",
+              "key": "RateLimit-Limit",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The remaining quota in the current rate limit window",
+              "key": "RateLimit-Remaining",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The number of seconds until the rate limit window resets",
+              "key": "RateLimit-Reset",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The rate limit policy.<br>See <a href=\"https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/\" target=\"_blank\" rel=\"noopener noreferrer\">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>",
+              "key": "RateLimit-Policy",
+              "value": "string"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[\n  {\n    \"type\": \"ActualInterval\",\n    \"duration\": 30,\n    \"spotPerKwh\": 6.12,\n    \"perKwh\": 24.33,\n    \"date\": \"2021-05-05\",\n    \"nemTime\": \"2021-05-06T12:30:00+10:00\",\n    \"startTime\": \"2021-05-05T02:00:01Z\",\n    \"endTime\": \"2021-05-05T02:30:00Z\",\n    \"renewables\": 45,\n    \"channelType\": \"general\",\n    \"spikeStatus\": \"none\",\n    \"descriptor\": \"neutral\",\n    \"tariffInformation\": {\n      \"period\": \"offPeak\",\n      \"season\": \"default\",\n      \"block\": 1.4403446023826971,\n      \"demandWindow\": true\n    }\n  },\n  {\n    \"type\": \"ActualInterval\",\n    \"duration\": 5,\n    \"spotPerKwh\": 6.12,\n    \"perKwh\": 24.33,\n    \"date\": \"2021-05-05\",\n    \"nemTime\": \"2021-05-06T12:30:00+10:00\",\n    \"startTime\": \"2021-05-05T02:00:01Z\",\n    \"endTime\": \"2021-05-05T02:30:00Z\",\n    \"renewables\": 45,\n    \"channelType\": \"general\",\n    \"spikeStatus\": \"potential\",\n    \"descriptor\": \"veryLow\",\n    \"tariffInformation\": {\n      \"period\": \"peak\",\n      \"season\": \"winter\",\n      \"block\": 1.1444178058592556,\n      \"demandWindow\": false\n    }\n  }\n]",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "52030acc-4920-45df-ab32-e190f8e31fb0",
+          "name": "Bad request",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "prices",
+                "current"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "next",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "previous",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` enpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "47740afd-eed0-47c5-92a9-4c988837d3ef",
+          "name": "API key is missing or invalid",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "prices",
+                "current"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "next",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "previous",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` enpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "495e7b9d-a15a-4b71-bb47-1e2715b090f3",
+          "name": "Site not found",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "prices",
+                "current"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "next",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "previous",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` enpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "e4459ba4-9c25-4dc7-8d5a-9853ed54e18d",
+          "name": "Internal Server Error",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "prices",
+                "current"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "next",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "previous",
+                  "value": "<integer>"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching prices for. Can be found using the `/sites` enpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    },
+    {
+      "id": "b0db1254-8f97-4fcb-a62a-5e7244cad3d9",
+      "name": "get Usage",
+      "request": {
+        "name": "get Usage",
+        "description": {
+          "content": "Returns all usage data between the start and end dates. The API can only return 90-days worth of data.",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "sites",
+            ":siteId",
+            "usage"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [
+            {
+              "disabled": false,
+              "key": "startDate",
+              "value": "<date>",
+              "description": "(Required) Return all usage for each interval on and after this day."
+            },
+            {
+              "disabled": false,
+              "key": "endDate",
+              "value": "<date>",
+              "description": "(Required) Return all usage for each interval on and before this day."
+            },
+            {
+              "disabled": false,
+              "key": "resolution",
+              "value": "30",
+              "description": "Specify the required interval duration resolution. Valid options: 30. Default: 30"
+            }
+          ],
+          "variable": [
+            {
+              "disabled": false,
+              "type": "any",
+              "value": "<string>",
+              "key": "siteId",
+              "description": "(Required) ID of the site you are fetching usage for. Can be found using the `/sites` enpoint"
+            }
+          ]
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "GET",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{bearerToken}}"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "id": "fe12d415-7784-4f2d-8440-a49261f3e994",
+          "name": "Usage for the requested period.<br><br>Return Order: General > Controlled Load > Feed In.<br><br>**NOTE**: If a channel is added or removed the index offset will change. It is best to filter or group the array by channel type.",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "usage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching usage for. Can be found using the `/sites` enpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "disabled": false,
+              "description": "The number of requests allowed per rate limit window",
+              "key": "RateLimit-Limit",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The remaining quota in the current rate limit window",
+              "key": "RateLimit-Remaining",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The number of seconds until the rate limit window resets",
+              "key": "RateLimit-Reset",
+              "value": "6444"
+            },
+            {
+              "disabled": false,
+              "description": "The rate limit policy.<br>See <a href=\"https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/\" target=\"_blank\" rel=\"noopener noreferrer\">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>",
+              "key": "RateLimit-Policy",
+              "value": "string"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[\n  {\n    \"channelIdentifier\": \"E1\",\n    \"channelType\": \"general\",\n    \"cost\": 6650.814187851985,\n    \"date\": \"2021-05-05\",\n    \"descriptor\": \"high\",\n    \"duration\": 15,\n    \"endTime\": \"2021-05-05T02:30:00Z\",\n    \"kwh\": 5941.891572853591,\n    \"nemTime\": \"2021-05-06T12:30:00+10:00\",\n    \"perKwh\": 24.33,\n    \"quality\": \"billable\",\n    \"renewables\": 45,\n    \"spikeStatus\": \"spike\",\n    \"spotPerKwh\": 6.12,\n    \"startTime\": \"2021-05-05T02:00:01Z\",\n    \"type\": \"Usage\",\n    \"tariffInformation\": {\n      \"period\": \"peak\",\n      \"season\": \"summer\",\n      \"block\": 1.7950976464712944,\n      \"demandWindow\": false\n    }\n  },\n  {\n    \"channelIdentifier\": \"E1\",\n    \"channelType\": \"general\",\n    \"cost\": 8430.088782288409,\n    \"date\": \"2021-05-05\",\n    \"descriptor\": \"extremelyLow\",\n    \"duration\": 30,\n    \"endTime\": \"2021-05-05T02:30:00Z\",\n    \"kwh\": 6835.231940544061,\n    \"nemTime\": \"2021-05-06T12:30:00+10:00\",\n    \"perKwh\": 24.33,\n    \"quality\": \"estimated\",\n    \"renewables\": 45,\n    \"spikeStatus\": \"spike\",\n    \"spotPerKwh\": 6.12,\n    \"startTime\": \"2021-05-05T02:00:01Z\",\n    \"type\": \"Usage\",\n    \"tariffInformation\": {\n      \"period\": \"offPeak\",\n      \"season\": \"weekendHoliday\",\n      \"block\": 1.7017203836056582,\n      \"demandWindow\": false\n    }\n  }\n]",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "8a1ec6e6-07d1-43d0-9e65-23ac95d99bb6",
+          "name": "Bad request",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "usage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching usage for. Can be found using the `/sites` enpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "a168138c-9635-4ded-8ec9-0d765a527d32",
+          "name": "API key is missing or invalid",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "usage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching usage for. Can be found using the `/sites` enpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "29e5823b-3682-42ac-9e5d-7fe134340abf",
+          "name": "Site not found",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "usage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching usage for. Can be found using the `/sites` enpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "be546186-baa4-434a-9139-3ff2d00bbb3f",
+          "name": "Internal Server Error",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "sites",
+                ":siteId",
+                "usage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2021-05-05"
+                },
+                {
+                  "key": "resolution",
+                  "value": "30"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "siteId",
+                  "description": "(Required) ID of the site you are fetching usage for. Can be found using the `/sites` enpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.amber.com.au/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "525b08eb-3144-458c-8e9c-caa66f70853e",
+    "name": "Amber Electric Public API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}
