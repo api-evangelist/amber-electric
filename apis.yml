@@ -42,58 +42,19 @@ created: '2026-07-27'
 modified: '2026-07-27'
 specificationVersion: '0.23'
 apis:
-- aid: amber-electric:amber-electric-public-api
-  name: Amber Electric Public API
-  description: >-
-    Amber Electric's own documented REST API, described by a verbatim OpenAPI
-    3.0.0 contract the company publishes in its public GitHub repository. Five
-    read-only operations: list the sites on your account, fetch actual, current
-    and forecast half-hourly prices for a site, fetch usage for a site, and read
-    the current renewables percentage for a National Electricity Market state.
-    Authentication is HTTP bearer (declared in the spec as the `apiKey` security
-    scheme, type http / scheme bearer) and the token is generated from the
-    Developers tab inside the logged-in Amber customer app, so four of the five
-    operations require an active Amber account. The renewables operation carries
-    an explicit `security: []` override and was confirmed to return 200
-    anonymously on 2026-07-27.
-  humanURL: https://app.amber.com.au/developers
-  baseURL: https://api.amber.com.au/v1
-  tags:
-  - Energy
-  - Electricity
-  - Pricing
-  - Usage
-  - Renewables
-  - Australia
-  properties:
-  - type: OpenAPI
-    url: openapi/amber-electric-public-api-openapi.json
-  - type: Documentation
-    url: https://app.amber.com.au/developers
-  - type: APIReference
-    url: https://app.amber.com.au/developers/documentation
-  - type: SourceCode
-    url: https://github.com/amberelectric/public-api
-  - type: Support
-    url: https://github.com/amberelectric/public-api/discussions
 - aid: amber-electric:amber-electric-cdr-energy-api
   name: Amber Electric Consumer Data Right Energy API
   description: >-
-    Amber's Consumer Data Right energy data-holder surface, mandated by the
-    Australian CDR regime extended from banking into energy and administered by
-    the ACCC with standards set by the Data Standards Body. Amber is listed on
-    the public CDR Register as an energy data holder brand (dataHolderBrandId
-    54968899-b7b5-ef11-95f6-6045bd3f1493, ABN 98623603805, lastUpdated
-    2026-07-23) with the public base URI https://public.cdr.amber.com.au. The
-    implementation was verified live on 2026-07-27, not merely claimed: the
-    Consumer Data Standards discovery endpoints /cds-au/v1/discovery/status and
-    /cds-au/v1/discovery/outages both returned 200 with conformant CDS payloads,
-    and /.well-known/openid-configuration is served anonymously. Access is
-    accredited-only — dynamic client registration at
-    https://secure.cdr.amber.com.au/connect/register with private_key_jwt client
-    authentication and PAR, reachable only by an accredited CDR data recipient
-    holding a software statement assertion from the CDR Register. No general
-    developer can call it.
+    Amber's Consumer Data Right energy data-holder surface, mandated by the Australian CDR regime extended
+    from banking into energy and administered by the ACCC with standards set by the Data Standards Body.
+    Amber is listed on the public CDR Register as an energy data holder brand (dataHolderBrandId 54968899-b7b5-ef11-95f6-6045bd3f1493,
+    ABN 98623603805, lastUpdated 2026-07-23) with the public base URI https://public.cdr.amber.com.au.
+    The implementation was verified live on 2026-07-27, not merely claimed: the Consumer Data Standards
+    discovery endpoints /cds-au/v1/discovery/status and /cds-au/v1/discovery/outages both returned 200
+    with conformant CDS payloads, and /.well-known/openid-configuration is served anonymously. Access
+    is accredited-only — dynamic client registration at https://secure.cdr.amber.com.au/connect/register
+    with private_key_jwt client authentication and PAR, reachable only by an accredited CDR data recipient
+    holding a software statement assertion from the CDR Register. No general developer can call it.
   humanURL: https://www.cdr.gov.au/
   baseURL: https://public.cdr.amber.com.au/cds-au/v1
   tags:
@@ -116,6 +77,42 @@ apis:
     url: https://www.cdr.gov.au/consumers/energy
   - type: OAuthScopes
     url: scopes/amber-electric-scopes.yml
+- aid: amber-electric:amber-electric-sites-api
+  name: Amber Electric Sites API
+  description: The Sites API from Amber Electric — 4 operation(s) for sites.
+  humanURL: https://app.amber.com.au/developers
+  baseURL: https://api.amber.com.au/v1
+  tags:
+  - Sites
+  properties:
+  - type: OpenAPI
+    url: openapi/amber-electric-sites-api-openapi.yml
+  - type: Documentation
+    url: https://app.amber.com.au/developers
+  - type: APIReference
+    url: https://app.amber.com.au/developers/documentation
+  - type: SourceCode
+    url: https://github.com/amberelectric/public-api
+  - type: Support
+    url: https://github.com/amberelectric/public-api/discussions
+- aid: amber-electric:amber-electric-state-api
+  name: Amber Electric State API
+  description: The State API from Amber Electric — 1 operation(s) for state.
+  humanURL: https://app.amber.com.au/developers
+  baseURL: https://api.amber.com.au/v1
+  tags:
+  - State
+  properties:
+  - type: OpenAPI
+    url: openapi/amber-electric-state-api-openapi.yml
+  - type: Documentation
+    url: https://app.amber.com.au/developers
+  - type: APIReference
+    url: https://app.amber.com.au/developers/documentation
+  - type: SourceCode
+    url: https://github.com/amberelectric/public-api
+  - type: Support
+    url: https://github.com/amberelectric/public-api/discussions
 common:
 - type: IssueTracker
   url: https://github.com/amberelectric/public-api/issues
