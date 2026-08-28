@@ -24,6 +24,20 @@ description: >-
   base URI at https://public.cdr.amber.com.au, whose CDS discovery endpoints and
   anonymously-served OpenID Connect configuration advertise the full Consumer
   Data Standards energy scope set behind private_key_jwt and CDR accreditation.
+deliveryModel:
+  model: open-core
+  license: MIT
+  open_source: true
+  commercial: true
+  callable_host: true
+  label: Open core · an OSS project plus a commercial hosted product
+  confidence: high
+  source:
+  - license
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/amber-electric.png
 tags:
 - Energy
