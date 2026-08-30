@@ -1,0 +1,189 @@
+openapi: 3.2.0
+info:
+  title: Amber Electric Public State API
+  version: '1.0'
+servers:
+- url: https://api.amber.com.au/v1
+tags:
+- name: State
+paths:
+  /state/{state}/renewables/current:
+    get:
+      description: Returns the current percentage of renewables in the grid
+      operationId: getCurrentRenewables
+      security: []
+      parameters:
+      - name: state
+        description: 'State you would like the renewables for. Valid states: nsw, sa, qld, vic'
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: next
+        description: Return the _next_ number of forecast intervals
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: previous
+        description: Return the _previous_ number of actual intervals.
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: resolution
+        in: query
+        description: 'Specify the required interval duration resolution. Valid options: 5, 30. Default: 30'
+        required: false
+        schema:
+          type: integer
+          enum:
+          - 5
+          - 30
+          default: 30
+      responses:
+        '200':
+          description: The current percentage of renewables in the grid.
+          headers:
+            RateLimit-Limit:
+              $ref: '#/components/headers/RateLimit-Limit'
+            RateLimit-Remaining:
+              $ref: '#/components/headers/RateLimit-Remaining'
+            RateLimit-Reset:
+              $ref: '#/components/headers/RateLimit-Reset'
+            RateLimit-Policy:
+              $ref: '#/components/headers/RateLimit-Policy'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                  - $ref: '#/components/schemas/ActualRenewable'
+                  - $ref: '#/components/schemas/CurrentRenewable'
+                  - $ref: '#/components/schemas/ForecastRenewable'
+                  discriminator:
+                    propertyName: type
+                    mapping:
+                      ActualRenewable: '#/components/schemas/ActualRenewable'
+                      ForecastRenewable: '#/components/schemas/ForecastRenewable'
+                      CurrentRenewable: '#/components/schemas/CurrentRenewable'
+        '400':
+          description: Bad request
+        '404':
+          description: State not found
+        '500':
+          description: Internal Server Error
+      tags:
+      - State
+components:
+  headers:
+    RateLimit-Reset:
+      schema:
+        type: integer
+      description: The number of seconds until the rate limit window resets
+    RateLimit-Policy:
+      schema:
+        type: string
+      description: The rate limit policy.<br>See <a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/" target="_blank" rel="noopener noreferrer">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>
+    RateLimit-Remaining:
+      schema:
+        type: integer
+      description: The remaining quota in the current rate limit window
+    RateLimit-Limit:
+      schema:
+        type: integer
+      description: The number of requests allowed per rate limit window
+  schemas:
+    ActualRenewable:
+      allOf:
+      - $ref: '#/components/schemas/Renewable'
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+            - ActualRenewable
+    ForecastRenewable:
+      allOf:
+      - $ref: '#/components/schemas/Renewable'
+      - type: object
+        description: Returns a forecasted renewables based on AEMO modelling. This is what AEMO thinks the renewables will be during the interval.
+        properties:
+          type:
+            type: string
+            enum:
+            - ForecastRenewable
+    CurrentRenewable:
+      allOf:
+      - $ref: '#/components/schemas/Renewable'
+      - type: object
+        description: Returns the current interval's renewables
+        properties:
+          type:
+            type: string
+            enum:
+            - CurrentRenewable
+    RenewableDescriptor:
+      type: string
+      description: Describes the state of renewables. Gives you an indication of how green power is right now
+      enum:
+      - best
+      - great
+      - ok
+      - notGreat
+      - worst
+    Renewable:
+      type: object
+      description: Renewable data
+      required:
+      - type
+      - duration
+      - date
+      - nemTime
+      - startTime
+      - endTime
+      - renewables
+      - descriptor
+      properties:
+        type:
+          type: string
+        duration:
+          type: integer
+          description: Length of the interval in minutes.
+          enum:
+          - 5
+          - 15
+          - 30
+        date:
+          type: string
+          description: Date the interval belongs to (in NEM time). This may be different to the date component of nemTime, as the last interval of the day ends at 12:00 the following day. Formatted as a ISO 8601 date
+          example: '2021-05-05'
+          format: date
+        nemTime:
+          type: string
+          description: The interval's NEM time. This represents the time at the end of the interval UTC+10. Formatted as a ISO 8601 time
+          example: '2021-05-06T12:30:00+10:00'
+          format: date-time
+        startTime:
+          type: string
+          description: Start time of the interval in UTC. Formatted as a ISO 8601 time
+          example: '2021-05-05T02:00:01Z'
+          format: date-time
+        endTime:
+          type: string
+          description: End time of the interval in UTC. Formatted as a ISO 8601 time
+          example: '2021-05-05T02:30:00Z'
+          format: date-time
+        renewables:
+          type: number
+          description: Percentage of renewables in the grid
+          minimum: 0
+          maximum: 100
+          example: 45
+        descriptor:
+          $ref: '#/components/schemas/RenewableDescriptor'
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
