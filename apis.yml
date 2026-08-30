@@ -115,6 +115,8 @@ apis:
   humanURL: https://app.amber.com.au/developers
   baseURL: https://api.amber.com.au/v1
   tags:
+  - States
+  tags_raw:
   - State
   properties:
   - type: OpenAPI
