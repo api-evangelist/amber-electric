@@ -38,6 +38,21 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source:
+  - authentication
+  - scopes
+  - rate-limits
+  - security
+  generated: '2026-09-03'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/amber-electric.png
 tags:
 - Energy
@@ -149,8 +164,9 @@ common:
   url: well-known/amber-electric-well-known.yml
 - type: LLMsTxt
   url: llms/amber-electric-llms.txt
-- type: MCPServer
+- type: X-MCPServerCandidate
   url: mcp/amber-electric-mcp.yml
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
 - type: Overlay
   url: overlays/amber-electric-public-api-overlay.yaml
 - type: Conformance
