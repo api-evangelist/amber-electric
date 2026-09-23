@@ -1,0 +1,29 @@
+{
+  "provider": "amber-electric",
+  "sources": [
+    "_original/amber-electric-public-api-openapi.json"
+  ],
+  "outputs": [
+    "amber-electric-sites-api-openapi.yml",
+    "amber-electric-state-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "amber-electric-public-api-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "amber-electric-public-api-openapi.json: tagged paths GET /state/{state}/renewables/current -> State",
+    "amber-electric-public-api-openapi.json: tagged paths GET /sites -> Sites",
+    "amber-electric-public-api-openapi.json: tagged paths GET /sites/{siteId}/prices -> Sites",
+    "amber-electric-public-api-openapi.json: tagged paths GET /sites/{siteId}/prices/current -> Sites",
+    "amber-electric-public-api-openapi.json: tagged paths GET /sites/{siteId}/usage -> Sites",
+    "amber-electric-public-api-openapi.json: declared missing tag: Sites",
+    "amber-electric-public-api-openapi.json: declared missing tag: State",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "amber-electric-sites-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "amber-electric-state-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

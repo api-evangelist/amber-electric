@@ -1,0 +1,27 @@
+# Front Door AI Index — amber-electric — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: amber-electric
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: amber.com.au
+  final_host: www.amber.com.au
+  ownership: own
+  owner: amber-electric
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 1
+  host_score: 1
+  density: 0.5
+  words: 1995
+  tiers:
+    agentic: 0
+    core: 1
+    model: 0
+  ambiguous: 9
+  top_terms:
+    smart: 6
+    automation: 3
+    AI: 1

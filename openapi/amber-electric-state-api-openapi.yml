@@ -76,34 +76,27 @@ paths:
           description: Internal Server Error
       tags:
       - State
+      summary: Get current renewables
+      x-summary-source: derived
 components:
   headers:
-    RateLimit-Reset:
-      schema:
-        type: integer
-      description: The number of seconds until the rate limit window resets
-    RateLimit-Policy:
-      schema:
-        type: string
-      description: The rate limit policy.<br>See <a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/" target="_blank" rel="noopener noreferrer">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>
     RateLimit-Remaining:
       schema:
         type: integer
       description: The remaining quota in the current rate limit window
+    RateLimit-Policy:
+      schema:
+        type: string
+      description: The rate limit policy.<br>See <a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/" target="_blank" rel="noopener noreferrer">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>
     RateLimit-Limit:
       schema:
         type: integer
       description: The number of requests allowed per rate limit window
+    RateLimit-Reset:
+      schema:
+        type: integer
+      description: The number of seconds until the rate limit window resets
   schemas:
-    ActualRenewable:
-      allOf:
-      - $ref: '#/components/schemas/Renewable'
-      - type: object
-        properties:
-          type:
-            type: string
-            enum:
-            - ActualRenewable
     ForecastRenewable:
       allOf:
       - $ref: '#/components/schemas/Renewable'
@@ -124,15 +117,6 @@ components:
             type: string
             enum:
             - CurrentRenewable
-    RenewableDescriptor:
-      type: string
-      description: Describes the state of renewables. Gives you an indication of how green power is right now
-      enum:
-      - best
-      - great
-      - ok
-      - notGreat
-      - worst
     Renewable:
       type: object
       description: Renewable data
@@ -183,6 +167,24 @@ components:
           example: 45
         descriptor:
           $ref: '#/components/schemas/RenewableDescriptor'
+    RenewableDescriptor:
+      type: string
+      description: Describes the state of renewables. Gives you an indication of how green power is right now
+      enum:
+      - best
+      - great
+      - ok
+      - notGreat
+      - worst
+    ActualRenewable:
+      allOf:
+      - $ref: '#/components/schemas/Renewable'
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+            - ActualRenewable
   securitySchemes:
     apiKey:
       type: http
