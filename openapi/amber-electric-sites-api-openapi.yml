@@ -261,14 +261,19 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ChannelType:
-      type: string
-      description: Meter channel type
-      enum:
-      - general
-      - controlledLoad
-      - feedIn
-      example: general
+    ForecastInterval:
+      allOf:
+      - $ref: '#/components/schemas/Interval'
+      - type: object
+        description: Returns a forecasted price based on AEMO modelling. This is what AEMO thinks the price will be during the interval.
+        properties:
+          type:
+            type: string
+            enum:
+            - ForecastInterval
+          range:
+            allOf:
+            - $ref: '#/components/schemas/Range'
     Site:
       type: object
       required:
@@ -322,46 +327,33 @@ components:
           type: string
           description: Date the site closed. Undefined if the site is pending or active. Formatted as a ISO 8601 date when present.
           example: '2022-05-01'
-    ActualInterval:
-      allOf:
-      - $ref: '#/components/schemas/Interval'
-      - type: object
-        properties:
-          type:
-            type: string
-            enum:
-            - ActualInterval
-    CurrentInterval:
-      allOf:
-      - $ref: '#/components/schemas/Interval'
-      - type: object
-        description: Returns the current interval's forecasted price comprised of the weighted average of 5-minute actual prices and 5-minute forecast prices. In the last 5-minutes of the interval, the price represents the final price for that interval.
-        required:
-        - estimate
-        properties:
-          type:
-            type: string
-            enum:
-            - CurrentInterval
-          range:
-            allOf:
-            - $ref: '#/components/schemas/Range'
-          estimate:
-            type: boolean
-            description: Shows true the current price is an estimate. Shows false is the price has been locked in.
-    Range:
+    Channel:
       type: object
-      description: When prices are particularly volatile, the API may return a range of NEM spot prices (c/kWh) that are possible.
+      description: 'Describes a power meter channel.
+
+
+        The General channel provides continuous power - it''s the channel all of your appliances and lights are attached to.
+
+
+        Controlled loads are only on for a limited time during the day (usually when the load on the network is low, or generation is high) - you may have your hot water system attached to this channel.
+
+
+        The feed in channel sends power back to the grid - you will have these types of channels if you have solar or batteries.'
       required:
-      - min
-      - max
+      - identifier
+      - type
+      - tariff
       properties:
-        min:
-          type: number
-          description: Estimated minimum price (c/kWh)
-        max:
-          type: number
-          description: Estimated maximum price (c/kWh)
+        identifier:
+          type: string
+          description: Identifier of the channel
+          example: E1
+        type:
+          $ref: '#/components/schemas/ChannelType'
+        tariff:
+          type: string
+          description: The tariff code of the channel
+          example: A100
     Interval:
       type: object
       description: One time interval
@@ -429,6 +421,32 @@ components:
           $ref: '#/components/schemas/SpikeStatus'
         descriptor:
           $ref: '#/components/schemas/PriceDescriptor'
+    CurrentInterval:
+      allOf:
+      - $ref: '#/components/schemas/Interval'
+      - type: object
+        description: Returns the current interval's forecasted price comprised of the weighted average of 5-minute actual prices and 5-minute forecast prices. In the last 5-minutes of the interval, the price represents the final price for that interval.
+        required:
+        - estimate
+        properties:
+          type:
+            type: string
+            enum:
+            - CurrentInterval
+          range:
+            allOf:
+            - $ref: '#/components/schemas/Range'
+          estimate:
+            type: boolean
+            description: Shows true the current price is an estimate. Shows false is the price has been locked in.
+    ChannelType:
+      type: string
+      description: Meter channel type
+      enum:
+      - general
+      - controlledLoad
+      - feedIn
+      example: general
     PriceDescriptor:
       type: string
       description: 'Describes the current price. Gives you an indication of how cheap the price is in relation to the average VMO and DMO. Note: Negative is no longer used. It has been replaced with extremelyLow.'
@@ -440,33 +458,58 @@ components:
       - neutral
       - high
       - spike
-    Channel:
+    Usage:
+      allOf:
+      - $ref: '#/components/schemas/Interval'
+      - type: object
+        required:
+        - channelIdentifier
+        - kwh
+        - quality
+        - cost
+        properties:
+          type:
+            type: string
+            enum:
+            - Usage
+          channelIdentifier:
+            type: string
+            description: Meter channel identifier
+            example: E1
+          kwh:
+            type: number
+            description: Number of kWh you consumed or generated. Generated numbers will be negative
+          quality:
+            type: string
+            enum:
+            - estimated
+            - billable
+            description: If the metering company has had trouble contacting your meter, they may make an estimate of your usage for that period. Billable data is data that will appear on your bill.
+          cost:
+            type: number
+            description: The total cost of your consumption or generation for this period - includes GST
+    Range:
       type: object
-      description: 'Describes a power meter channel.
-
-
-        The General channel provides continuous power - it''s the channel all of your appliances and lights are attached to.
-
-
-        Controlled loads are only on for a limited time during the day (usually when the load on the network is low, or generation is high) - you may have your hot water system attached to this channel.
-
-
-        The feed in channel sends power back to the grid - you will have these types of channels if you have solar or batteries.'
+      description: When prices are particularly volatile, the API may return a range of NEM spot prices (c/kWh) that are possible.
       required:
-      - identifier
-      - type
-      - tariff
+      - min
+      - max
       properties:
-        identifier:
-          type: string
-          description: Identifier of the channel
-          example: E1
-        type:
-          $ref: '#/components/schemas/ChannelType'
-        tariff:
-          type: string
-          description: The tariff code of the channel
-          example: A100
+        min:
+          type: number
+          description: Estimated minimum price (c/kWh)
+        max:
+          type: number
+          description: Estimated maximum price (c/kWh)
+    ActualInterval:
+      allOf:
+      - $ref: '#/components/schemas/Interval'
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+            - ActualInterval
     TariffInformation:
       type: object
       description: Information about how your tariff affects an interval
@@ -501,49 +544,6 @@ components:
         demandWindow:
           type: boolean
           description: Is this interval currently in the demand window? Only available if the site in on a demand tariff
-    ForecastInterval:
-      allOf:
-      - $ref: '#/components/schemas/Interval'
-      - type: object
-        description: Returns a forecasted price based on AEMO modelling. This is what AEMO thinks the price will be during the interval.
-        properties:
-          type:
-            type: string
-            enum:
-            - ForecastInterval
-          range:
-            allOf:
-            - $ref: '#/components/schemas/Range'
-    Usage:
-      allOf:
-      - $ref: '#/components/schemas/Interval'
-      - type: object
-        required:
-        - channelIdentifier
-        - kwh
-        - quality
-        - cost
-        properties:
-          type:
-            type: string
-            enum:
-            - Usage
-          channelIdentifier:
-            type: string
-            description: Meter channel identifier
-            example: E1
-          kwh:
-            type: number
-            description: Number of kWh you consumed or generated. Generated numbers will be negative
-          quality:
-            type: string
-            enum:
-            - estimated
-            - billable
-            description: If the metering company has had trouble contacting your meter, they may make an estimate of your usage for that period. Billable data is data that will appear on your bill.
-          cost:
-            type: number
-            description: The total cost of your consumption or generation for this period - includes GST
     SpikeStatus:
       type: string
       description: Indicates whether this interval will potentially spike, or is currently in a spike state
@@ -552,22 +552,22 @@ components:
       - potential
       - spike
   headers:
-    RateLimit-Remaining:
-      schema:
-        type: integer
-      description: The remaining quota in the current rate limit window
-    RateLimit-Policy:
-      schema:
-        type: string
-      description: The rate limit policy.<br>See <a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/" target="_blank" rel="noopener noreferrer">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>
-    RateLimit-Limit:
-      schema:
-        type: integer
-      description: The number of requests allowed per rate limit window
     RateLimit-Reset:
       schema:
         type: integer
       description: The number of seconds until the rate limit window resets
+    RateLimit-Policy:
+      schema:
+        type: string
+      description: The rate limit policy.<br>See <a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/" target="_blank" rel="noopener noreferrer">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>
+    RateLimit-Remaining:
+      schema:
+        type: integer
+      description: The remaining quota in the current rate limit window
+    RateLimit-Limit:
+      schema:
+        type: integer
+      description: The number of requests allowed per rate limit window
   securitySchemes:
     apiKey:
       type: http
