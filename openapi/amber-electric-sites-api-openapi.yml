@@ -260,100 +260,67 @@ paths:
       summary: Get usage
       x-summary-source: derived
 components:
+  headers:
+    RateLimit-Remaining:
+      schema:
+        type: integer
+      description: The remaining quota in the current rate limit window
+    RateLimit-Policy:
+      schema:
+        type: string
+      description: The rate limit policy.<br>See <a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/" target="_blank" rel="noopener noreferrer">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>
+    RateLimit-Reset:
+      schema:
+        type: integer
+      description: The number of seconds until the rate limit window resets
+    RateLimit-Limit:
+      schema:
+        type: integer
+      description: The number of requests allowed per rate limit window
   schemas:
-    ForecastInterval:
+    Usage:
       allOf:
       - $ref: '#/components/schemas/Interval'
       - type: object
-        description: Returns a forecasted price based on AEMO modelling. This is what AEMO thinks the price will be during the interval.
+        required:
+        - channelIdentifier
+        - kwh
+        - quality
+        - cost
         properties:
           type:
             type: string
             enum:
-            - ForecastInterval
-          range:
-            allOf:
-            - $ref: '#/components/schemas/Range'
-    Site:
+            - Usage
+          channelIdentifier:
+            type: string
+            description: Meter channel identifier
+            example: E1
+          kwh:
+            type: number
+            description: Number of kWh you consumed or generated. Generated numbers will be negative
+          quality:
+            type: string
+            enum:
+            - estimated
+            - billable
+            description: If the metering company has had trouble contacting your meter, they may make an estimate of your usage for that period. Billable data is data that will appear on your bill.
+          cost:
+            type: number
+            description: The total cost of your consumption or generation for this period - includes GST
+    Range:
       type: object
+      description: When prices are particularly volatile, the API may return a range of NEM spot prices (c/kWh) that are possible.
       required:
-      - id
-      - nmi
-      - channels
-      - network
-      - status
+      - min
+      - max
       properties:
-        id:
-          type: string
-          description: Unique Site Identifier
-          example: 01F5A5CRKMZ5BCX9P1S4V990AM
-        nmi:
-          type: string
-          description: National Metering Identifier (NMI) for the site
-          example: '3052282872'
-          minLength: 10
-          maxLength: 11
-        channels:
-          type: array
-          description: List of channels that are readable from your meter
-          items:
-            $ref: '#/components/schemas/Channel'
-        network:
-          type: string
-          description: The name of the site's network
-          example: Jemena
-        status:
-          type: string
-          enum:
-          - pending
-          - active
-          - closed
-          description: 'Site status.
-
-
-            Pending sites are still in the process of being transferred. Note: We only include sites that have correct address details. If you expect to see a site, but don''t, you may need to contact [info@amber.com.au](mailto:info@amber.com.au) to check that the address is correct.
-
-
-            Active sites are ones that we actively supply electricity to.
-
-
-            Closed sites are old sites that we no longer supply.'
-          example: active
-        activeFrom:
-          type: string
-          description: Date the site became active. This date will be in the future for pending sites. It may also be undefined, though if it is, contact [info@amber.com.au](mailto:info@amber.com.au) - there may be an issue with your address. Formatted as a ISO 8601 date when present.
-          example: '2022-01-01'
-        closedOn:
-          type: string
-          description: Date the site closed. Undefined if the site is pending or active. Formatted as a ISO 8601 date when present.
-          example: '2022-05-01'
-    Channel:
-      type: object
-      description: 'Describes a power meter channel.
-
-
-        The General channel provides continuous power - it''s the channel all of your appliances and lights are attached to.
-
-
-        Controlled loads are only on for a limited time during the day (usually when the load on the network is low, or generation is high) - you may have your hot water system attached to this channel.
-
-
-        The feed in channel sends power back to the grid - you will have these types of channels if you have solar or batteries.'
-      required:
-      - identifier
-      - type
-      - tariff
-      properties:
-        identifier:
-          type: string
-          description: Identifier of the channel
-          example: E1
-        type:
-          $ref: '#/components/schemas/ChannelType'
-        tariff:
-          type: string
-          description: The tariff code of the channel
-          example: A100
+        min:
+          type: number
+          description: Estimated minimum price (c/kWh)
+        max:
+          type: number
+          description: Estimated maximum price (c/kWh)
     Interval:
       type: object
       description: One time interval
@@ -421,6 +388,134 @@ components:
           $ref: '#/components/schemas/SpikeStatus'
         descriptor:
           $ref: '#/components/schemas/PriceDescriptor'
+    ForecastInterval:
+      allOf:
+      - $ref: '#/components/schemas/Interval'
+      - type: object
+        description: Returns a forecasted price based on AEMO modelling. This is what AEMO thinks the price will be during the interval.
+        properties:
+          type:
+            type: string
+            enum:
+            - ForecastInterval
+          range:
+            allOf:
+            - $ref: '#/components/schemas/Range'
+    Channel:
+      type: object
+      description: 'Describes a power meter channel.
+
+
+        The General channel provides continuous power - it''s the channel all of your appliances and lights are attached to.
+
+
+        Controlled loads are only on for a limited time during the day (usually when the load on the network is low, or generation is high) - you may have your hot water system attached to this channel.
+
+
+        The feed in channel sends power back to the grid - you will have these types of channels if you have solar or batteries.'
+      required:
+      - identifier
+      - type
+      - tariff
+      properties:
+        identifier:
+          type: string
+          description: Identifier of the channel
+          example: E1
+        type:
+          $ref: '#/components/schemas/ChannelType'
+        tariff:
+          type: string
+          description: The tariff code of the channel
+          example: A100
+    Site:
+      type: object
+      required:
+      - id
+      - nmi
+      - channels
+      - network
+      - status
+      properties:
+        id:
+          type: string
+          description: Unique Site Identifier
+          example: 01F5A5CRKMZ5BCX9P1S4V990AM
+        nmi:
+          type: string
+          description: National Metering Identifier (NMI) for the site
+          example: '3052282872'
+          minLength: 10
+          maxLength: 11
+        channels:
+          type: array
+          description: List of channels that are readable from your meter
+          items:
+            $ref: '#/components/schemas/Channel'
+        network:
+          type: string
+          description: The name of the site's network
+          example: Jemena
+        status:
+          type: string
+          enum:
+          - pending
+          - active
+          - closed
+          description: 'Site status.
+
+
+            Pending sites are still in the process of being transferred. Note: We only include sites that have correct address details. If you expect to see a site, but don''t, you may need to contact [info@amber.com.au](mailto:info@amber.com.au) to check that the address is correct.
+
+
+            Active sites are ones that we actively supply electricity to.
+
+
+            Closed sites are old sites that we no longer supply.'
+          example: active
+        activeFrom:
+          type: string
+          description: Date the site became active. This date will be in the future for pending sites. It may also be undefined, though if it is, contact [info@amber.com.au](mailto:info@amber.com.au) - there may be an issue with your address. Formatted as a ISO 8601 date when present.
+          example: '2022-01-01'
+        closedOn:
+          type: string
+          description: Date the site closed. Undefined if the site is pending or active. Formatted as a ISO 8601 date when present.
+          example: '2022-05-01'
+    ActualInterval:
+      allOf:
+      - $ref: '#/components/schemas/Interval'
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+            - ActualInterval
+    ChannelType:
+      type: string
+      description: Meter channel type
+      enum:
+      - general
+      - controlledLoad
+      - feedIn
+      example: general
+    SpikeStatus:
+      type: string
+      description: Indicates whether this interval will potentially spike, or is currently in a spike state
+      enum:
+      - none
+      - potential
+      - spike
+    PriceDescriptor:
+      type: string
+      description: 'Describes the current price. Gives you an indication of how cheap the price is in relation to the average VMO and DMO. Note: Negative is no longer used. It has been replaced with extremelyLow.'
+      enum:
+      - negative
+      - extremelyLow
+      - veryLow
+      - low
+      - neutral
+      - high
+      - spike
     CurrentInterval:
       allOf:
       - $ref: '#/components/schemas/Interval'
@@ -439,77 +534,6 @@ components:
           estimate:
             type: boolean
             description: Shows true the current price is an estimate. Shows false is the price has been locked in.
-    ChannelType:
-      type: string
-      description: Meter channel type
-      enum:
-      - general
-      - controlledLoad
-      - feedIn
-      example: general
-    PriceDescriptor:
-      type: string
-      description: 'Describes the current price. Gives you an indication of how cheap the price is in relation to the average VMO and DMO. Note: Negative is no longer used. It has been replaced with extremelyLow.'
-      enum:
-      - negative
-      - extremelyLow
-      - veryLow
-      - low
-      - neutral
-      - high
-      - spike
-    Usage:
-      allOf:
-      - $ref: '#/components/schemas/Interval'
-      - type: object
-        required:
-        - channelIdentifier
-        - kwh
-        - quality
-        - cost
-        properties:
-          type:
-            type: string
-            enum:
-            - Usage
-          channelIdentifier:
-            type: string
-            description: Meter channel identifier
-            example: E1
-          kwh:
-            type: number
-            description: Number of kWh you consumed or generated. Generated numbers will be negative
-          quality:
-            type: string
-            enum:
-            - estimated
-            - billable
-            description: If the metering company has had trouble contacting your meter, they may make an estimate of your usage for that period. Billable data is data that will appear on your bill.
-          cost:
-            type: number
-            description: The total cost of your consumption or generation for this period - includes GST
-    Range:
-      type: object
-      description: When prices are particularly volatile, the API may return a range of NEM spot prices (c/kWh) that are possible.
-      required:
-      - min
-      - max
-      properties:
-        min:
-          type: number
-          description: Estimated minimum price (c/kWh)
-        max:
-          type: number
-          description: Estimated maximum price (c/kWh)
-    ActualInterval:
-      allOf:
-      - $ref: '#/components/schemas/Interval'
-      - type: object
-        properties:
-          type:
-            type: string
-            enum:
-            - ActualInterval
     TariffInformation:
       type: object
       description: Information about how your tariff affects an interval
@@ -544,30 +568,6 @@ components:
         demandWindow:
           type: boolean
           description: Is this interval currently in the demand window? Only available if the site in on a demand tariff
-    SpikeStatus:
-      type: string
-      description: Indicates whether this interval will potentially spike, or is currently in a spike state
-      enum:
-      - none
-      - potential
-      - spike
-  headers:
-    RateLimit-Reset:
-      schema:
-        type: integer
-      description: The number of seconds until the rate limit window resets
-    RateLimit-Policy:
-      schema:
-        type: string
-      description: The rate limit policy.<br>See <a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/" target="_blank" rel="noopener noreferrer">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>
-    RateLimit-Remaining:
-      schema:
-        type: integer
-      description: The remaining quota in the current rate limit window
-    RateLimit-Limit:
-      schema:
-        type: integer
-      description: The number of requests allowed per rate limit window
   securitySchemes:
     apiKey:
       type: http
