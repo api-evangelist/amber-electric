@@ -1,0 +1,12 @@
+{
+ "url": "https://app.amber.com.au/swagger.json",
+ "requested_url": "https://app.amber.com.au/swagger.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 36899,
+ "sha256": "ce21ce84a99876092180418451eef4bd7a7e047bc38e0185128308484677e2ae",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
