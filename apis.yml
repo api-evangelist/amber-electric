@@ -68,7 +68,7 @@ tags:
 - Smart Metering
 - Wholesale Pricing
 created: '2026-07-27'
-modified: '2026-07-27'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
 - aid: amber-electric:amber-electric-cdr-energy-api
@@ -145,6 +145,10 @@ apis:
   - type: Support
     url: https://github.com/amberelectric/public-api/discussions
 common:
+- url: https://www.amber.com.au/blog
+  type: Blog
+- url: https://www.amber.com.au/blog/rss.xml
+  type: BlogRSS
 - type: IssueTracker
   url: https://github.com/amberelectric/public-api/issues
 - type: License
