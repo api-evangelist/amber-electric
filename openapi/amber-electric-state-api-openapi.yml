@@ -79,34 +79,17 @@ paths:
       summary: Get current renewables
       x-summary-source: derived
 components:
-  headers:
-    RateLimit-Reset:
-      schema:
-        type: integer
-      description: The number of seconds until the rate limit window resets
-    RateLimit-Remaining:
-      schema:
-        type: integer
-      description: The remaining quota in the current rate limit window
-    RateLimit-Limit:
-      schema:
-        type: integer
-      description: The number of requests allowed per rate limit window
-    RateLimit-Policy:
-      schema:
-        type: string
-      description: The rate limit policy.<br>See <a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/" target="_blank" rel="noopener noreferrer">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>
   schemas:
-    CurrentRenewable:
+    ForecastRenewable:
       allOf:
       - $ref: '#/components/schemas/Renewable'
       - type: object
-        description: Returns the current interval's renewables
+        description: Returns a forecasted renewables based on AEMO modelling. This is what AEMO thinks the renewables will be during the interval.
         properties:
           type:
             type: string
             enum:
-            - CurrentRenewable
+            - ForecastRenewable
     ActualRenewable:
       allOf:
       - $ref: '#/components/schemas/Renewable'
@@ -166,16 +149,6 @@ components:
           example: 45
         descriptor:
           $ref: '#/components/schemas/RenewableDescriptor'
-    ForecastRenewable:
-      allOf:
-      - $ref: '#/components/schemas/Renewable'
-      - type: object
-        description: Returns a forecasted renewables based on AEMO modelling. This is what AEMO thinks the renewables will be during the interval.
-        properties:
-          type:
-            type: string
-            enum:
-            - ForecastRenewable
     RenewableDescriptor:
       type: string
       description: Describes the state of renewables. Gives you an indication of how green power is right now
@@ -185,6 +158,33 @@ components:
       - ok
       - notGreat
       - worst
+    CurrentRenewable:
+      allOf:
+      - $ref: '#/components/schemas/Renewable'
+      - type: object
+        description: Returns the current interval's renewables
+        properties:
+          type:
+            type: string
+            enum:
+            - CurrentRenewable
+  headers:
+    RateLimit-Reset:
+      schema:
+        type: integer
+      description: The number of seconds until the rate limit window resets
+    RateLimit-Limit:
+      schema:
+        type: integer
+      description: The number of requests allowed per rate limit window
+    RateLimit-Remaining:
+      schema:
+        type: integer
+      description: The remaining quota in the current rate limit window
+    RateLimit-Policy:
+      schema:
+        type: string
+      description: The rate limit policy.<br>See <a href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/" target="_blank" rel="noopener noreferrer">https://datatracker.ietf.org/doc/draft-ietf-httpapi-ratelimit-headers/</a>
   securitySchemes:
     apiKey:
       type: http
