@@ -1,3 +1,23 @@
+generated: '2026-10-21'
+method: searched
+source:
+- https://zapier.com/apps/amber-electric/integrations
+- https://n8n.io/integrations/amber-electric/
+- https://composio.dev/toolkits/amber-electric
+- https://monid.ai/tools/amber-electric
+checked:
+- https://api.cdr.gov.au/cdr-register/v1/all/data-holders/brands/summary
+- https://www.home-assistant.io/integrations/amberelectric/ (200)
+- https://zapier.com/apps/amber-electric/integrations (404)
+- https://n8n.io/integrations/amber-electric/ (404)
+- https://www.amber.com.au/blog/building-the-bring-your-own-battery-energy-future (names no battery partners in
+  text)
+- https://composio.dev/toolkits/amber-electric
+- https://monid.ai/tools/amber-electric
+- https://n8n.io/integrations/amber-electric/
+- https://zapier.com/apps/amber-electric/integrations
+summary: null
+marketplace_apps: []
 edges:
 - partner_name: Consumer Data Right
   partner: null
@@ -16,7 +36,14 @@ edges:
     api_families: null
     detected_by: sweep-standard-registers.py
     detected: '2026-10-14'
-generated: '2026-10-12'
-method: searched
-checked:
-- https://api.cdr.gov.au/cdr-register/v1/all/data-holders/brands/summary
+- partner_name: Home Assistant
+  partner: null
+  type: marketplace
+  marketplace: Home Assistant integrations
+  channel: partner-built
+  direction: third-party
+  category: home-automation
+  evidence: https://www.home-assistant.io/integrations/amberelectric/
+  use_case: Exposes Amber price and forecast data (General, Controlled Load, Feed In channels) as Home Assistant
+    sensors, built on the amberelectric Python package.
+templates: []

@@ -1,9 +1,10 @@
 ---
-name: Pull interval usage and cost history for an Amber site
+name: amber-electric-usage-history
+title: Pull interval usage and cost history for an Amber site
 description: >-
   Walk an Amber Electric account's sites and download half-hourly consumption,
   generation, cost and data quality for a date range, in 90-day windows.
-api: openapi/amber-electric-public-api-openapi.json
+api: openapi/amber-electric-sites-api-openapi.yml
 base_url: https://api.amber.com.au/v1
 auth: bearer
 operations:

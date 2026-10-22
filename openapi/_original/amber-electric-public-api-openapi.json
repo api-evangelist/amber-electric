@@ -2,7 +2,17 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Amber Electric Public API",
-    "version": "1.0"
+    "contact": {
+      "email": "dev@amber.com.au",
+      "name": "Amber Electric Development Team",
+      "url": "https://www.amber.com.au"
+    },
+    "version": "2.1.0",
+    "description": "Amber is an Australian-based electricity retailer that pass through the real-time wholesale price of energy.\n\nBecause of Amber's wholesale power prices, you can save hundreds of dollars a year by automating high power devices like air-conditioners, heat pumps and pool pumps.\n\nThis Python library provides an interface to the API, allowing you to react to current and forecast prices, as well as download your historic usage.",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
   },
   "servers": [
     {
@@ -14,6 +24,22 @@
       "apiKey": {
         "type": "http",
         "scheme": "bearer"
+      },
+      "oauth2": {
+        "type": "oauth2",
+        "description": "Organizations that wish to use our APIs to access customer data can use OAuth to simplify getting customer consent. Please [fill in this form](https://forms.gle/wYxuy6mVChjzKtt37) if you would to apply for access.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://app.amber.com.au/oauth/authorize",
+            "refreshUrl": "https://api.amber.com.au/oauth/token",
+            "tokenUrl": "https://api.amber.com.au/oauth/token",
+            "scopes": {
+              "sites": "List customer sites and tariff information",
+              "prices": "Fetch customers prices",
+              "usage": "Fetch customer usage"
+            }
+          }
+        }
       }
     },
     "schemas": {
@@ -41,6 +67,16 @@
           }
         }
       },
+      "SiteStatus": {
+        "type": "string",
+        "description": "Site status.\n\nPending sites are still in the process of being transferred. Note: We only include sites that have correct address details. If you expect to see a site, but don't, you may need to contact [info@amber.com.au](mailto:info@amber.com.au) to check that the address is correct.\n\nActive sites are ones that we actively supply electricity to.\n\nClosed sites are old sites that we no longer supply.",
+        "enum": [
+          "pending",
+          "active",
+          "closed"
+        ],
+        "example": "closed"
+      },
       "Site": {
         "type": "object",
         "required": [
@@ -48,7 +84,8 @@
           "nmi",
           "channels",
           "network",
-          "status"
+          "status",
+          "intervalLength"
         ],
         "properties": {
           "id": {
@@ -76,24 +113,29 @@
             "example": "Jemena"
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "pending",
-              "active",
-              "closed"
-            ],
-            "description": "Site status.\n\nPending sites are still in the process of being transferred. Note: We only include sites that have correct address details. If you expect to see a site, but don't, you may need to contact [info@amber.com.au](mailto:info@amber.com.au) to check that the address is correct.\n\nActive sites are ones that we actively supply electricity to.\n\nClosed sites are old sites that we no longer supply.",
-            "example": "active"
+            "$ref": "#/components/schemas/SiteStatus"
           },
           "activeFrom": {
             "type": "string",
+            "format": "date",
             "description": "Date the site became active. This date will be in the future for pending sites. It may also be undefined, though if it is, contact [info@amber.com.au](mailto:info@amber.com.au) - there may be an issue with your address. Formatted as a ISO 8601 date when present.",
             "example": "2022-01-01"
           },
           "closedOn": {
             "type": "string",
+            "format": "date",
             "description": "Date the site closed. Undefined if the site is pending or active. Formatted as a ISO 8601 date when present.",
             "example": "2022-05-01"
+          },
+          "intervalLength": {
+            "type": "number",
+            "description": "Length of interval that you will be billed on. 5 or 30 minutes.",
+            "enum": [
+              5,
+              30
+            ],
+            "default": 30,
+            "example": 30
           }
         }
       },
@@ -158,6 +200,32 @@
           }
         }
       },
+      "AdvancedPrice": {
+        "type": "object",
+        "description": "Amber has created an advanced forecast system, that represents our confidence in the AEMO forecast. The range indicates where we think the price will land for a given interval.",
+        "required": [
+          "low",
+          "predicted",
+          "high"
+        ],
+        "properties": {
+          "low": {
+            "type": "number",
+            "description": "The lower bound of our prediction band. Price includes network and market fees. (c/kWh).",
+            "example": 1
+          },
+          "predicted": {
+            "type": "number",
+            "description": "The predicted price. Use this if you need a single number to forecast against. Price includes network and market fees. (c/kWh).",
+            "example": 3
+          },
+          "high": {
+            "type": "number",
+            "description": "The upper bound of our prediction band. Price includes network and market fees. (c/kWh).",
+            "example": 10
+          }
+        }
+      },
       "TariffInformation": {
         "type": "object",
         "description": "Information about how your tariff affects an interval",
@@ -200,7 +268,7 @@
           }
         }
       },
-      "Interval": {
+      "BaseInterval": {
         "type": "object",
         "description": "One time interval",
         "required": [
@@ -218,6 +286,9 @@
           "descriptor"
         ],
         "properties": {
+          "type": {
+            "type": "string"
+          },
           "duration": {
             "type": "integer",
             "description": "Length of the interval in minutes.",
@@ -264,8 +335,6 @@
           "renewables": {
             "type": "number",
             "description": "Percentage of renewables in the grid",
-            "minimum": 0,
-            "maximum": 100,
             "example": 45
           },
           "channelType": {
@@ -290,25 +359,29 @@
       "ActualInterval": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Interval"
+            "$ref": "#/components/schemas/BaseInterval"
           },
           {
             "type": "object",
             "properties": {
               "type": {
                 "type": "string",
+                "example": "ActualInterval",
                 "enum": [
                   "ActualInterval"
                 ]
               }
-            }
+            },
+            "required": [
+              "type"
+            ]
           }
         ]
       },
       "ForecastInterval": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Interval"
+            "$ref": "#/components/schemas/BaseInterval"
           },
           {
             "type": "object",
@@ -316,64 +389,84 @@
             "properties": {
               "type": {
                 "type": "string",
+                "example": "ForecastInterval",
                 "enum": [
                   "ForecastInterval"
                 ]
               },
               "range": {
                 "nullable": true,
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/Range"
-                  }
-                ]
+                "$ref": "#/components/schemas/Range"
+              },
+              "advancedPrice": {
+                "nullable": true,
+                "$ref": "#/components/schemas/AdvancedPrice"
               }
-            }
+            },
+            "required": [
+              "type"
+            ]
           }
         ]
       },
       "CurrentInterval": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Interval"
+            "$ref": "#/components/schemas/BaseInterval"
           },
           {
             "type": "object",
             "description": "Returns the current interval's forecasted price comprised of the weighted average of 5-minute actual prices and 5-minute forecast prices. In the last 5-minutes of the interval, the price represents the final price for that interval.",
             "required": [
+              "type",
               "estimate"
             ],
             "properties": {
               "type": {
                 "type": "string",
+                "example": "CurrentInterval",
                 "enum": [
                   "CurrentInterval"
                 ]
               },
               "range": {
                 "nullable": true,
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/Range"
-                  }
-                ]
+                "$ref": "#/components/schemas/Range"
               },
               "estimate": {
                 "type": "boolean",
                 "description": "Shows true the current price is an estimate. Shows false is the price has been locked in."
+              },
+              "advancedPrice": {
+                "nullable": true,
+                "$ref": "#/components/schemas/AdvancedPrice"
               }
             }
+          }
+        ]
+      },
+      "Interval": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ActualInterval"
+          },
+          {
+            "$ref": "#/components/schemas/CurrentInterval"
+          },
+          {
+            "$ref": "#/components/schemas/ForecastInterval"
           }
         ]
       },
       "Usage": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Interval"
+            "$ref": "#/components/schemas/BaseInterval"
           },
           {
             "type": "object",
             "required": [
+              "type",
               "channelIdentifier",
               "kwh",
               "quality",
@@ -382,6 +475,7 @@
             "properties": {
               "type": {
                 "type": "string",
+                "example": "Usage",
                 "enum": [
                   "Usage"
                 ]
@@ -411,7 +505,7 @@
           }
         ]
       },
-      "Renewable": {
+      "BaseRenewable": {
         "type": "object",
         "description": "Renewable data",
         "required": [
@@ -464,8 +558,6 @@
           "renewables": {
             "type": "number",
             "description": "Percentage of renewables in the grid",
-            "minimum": 0,
-            "maximum": 100,
             "example": 45
           },
           "descriptor": {
@@ -476,56 +568,67 @@
       "ActualRenewable": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Renewable"
+            "$ref": "#/components/schemas/BaseRenewable"
           },
           {
-            "type": "object",
             "properties": {
               "type": {
                 "type": "string",
-                "enum": [
-                  "ActualRenewable"
-                ]
+                "example": "ActualRenewable"
               }
-            }
+            },
+            "required": [
+              "type"
+            ]
           }
         ]
       },
       "ForecastRenewable": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Renewable"
+            "$ref": "#/components/schemas/BaseRenewable"
           },
           {
-            "type": "object",
-            "description": "Returns a forecasted renewables based on AEMO modelling. This is what AEMO thinks the renewables will be during the interval.",
             "properties": {
               "type": {
                 "type": "string",
-                "enum": [
-                  "ForecastRenewable"
-                ]
+                "example": "ForecastRenewable"
               }
-            }
+            },
+            "required": [
+              "type"
+            ]
           }
         ]
       },
       "CurrentRenewable": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Renewable"
+            "$ref": "#/components/schemas/BaseRenewable"
           },
           {
-            "type": "object",
-            "description": "Returns the current interval's renewables",
             "properties": {
               "type": {
                 "type": "string",
-                "enum": [
-                  "CurrentRenewable"
-                ]
+                "example": "CurrentRenewable"
               }
-            }
+            },
+            "required": [
+              "type"
+            ]
+          }
+        ]
+      },
+      "Renewable": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ActualRenewable"
+          },
+          {
+            "$ref": "#/components/schemas/CurrentRenewable"
+          },
+          {
+            "$ref": "#/components/schemas/ForecastRenewable"
           }
         ]
       }
@@ -568,6 +671,9 @@
   "paths": {
     "/state/{state}/renewables/current": {
       "get": {
+        "tags": [
+          "Amber"
+        ],
         "description": "Returns the current percentage of renewables in the grid",
         "operationId": "getCurrentRenewables",
         "security": [],
@@ -579,7 +685,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "vic"
           },
           {
             "name": "next",
@@ -588,7 +695,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "example": "48"
           },
           {
             "name": "previous",
@@ -597,7 +705,8 @@
             "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "example": "48"
           },
           {
             "name": "resolution",
@@ -636,25 +745,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "oneOf": [
-                      {
-                        "$ref": "#/components/schemas/ActualRenewable"
-                      },
-                      {
-                        "$ref": "#/components/schemas/CurrentRenewable"
-                      },
-                      {
-                        "$ref": "#/components/schemas/ForecastRenewable"
-                      }
-                    ],
-                    "discriminator": {
-                      "propertyName": "type",
-                      "mapping": {
-                        "ActualRenewable": "#/components/schemas/ActualRenewable",
-                        "ForecastRenewable": "#/components/schemas/ForecastRenewable",
-                        "CurrentRenewable": "#/components/schemas/CurrentRenewable"
-                      }
-                    }
+                    "$ref": "#/components/schemas/Renewable"
                   }
                 }
               }
@@ -674,11 +765,19 @@
     },
     "/sites": {
       "get": {
+        "tags": [
+          "Amber"
+        ],
         "description": "Return all sites linked to your account",
         "operationId": "getSites",
         "security": [
           {
             "apiKey": []
+          },
+          {
+            "oauth2": [
+              "sites"
+            ]
           }
         ],
         "parameters": [],
@@ -721,11 +820,19 @@
     },
     "/sites/{siteId}/prices": {
       "get": {
+        "tags": [
+          "Amber"
+        ],
         "description": "Returns all the prices between the start and end dates",
         "operationId": "getPrices",
         "security": [
           {
             "apiKey": []
+          },
+          {
+            "oauth2": [
+              "prices"
+            ]
           }
         ],
         "parameters": [
@@ -734,6 +841,7 @@
             "description": "ID of the site you are fetching prices for. Can be found using the `/sites` endpoint",
             "in": "path",
             "required": true,
+            "example": "01J23BAP2SFA218BMV8A73Y9Z9",
             "schema": {
               "type": "string"
             }
@@ -741,7 +849,7 @@
           {
             "name": "startDate",
             "in": "query",
-            "description": "Return all prices for each interval on and after this day. Defaults to today.",
+            "description": "Return all prices for each interval on and after this day. Defaults to today. The difference between `startDate` and `endDate` must not exceed 7 days.",
             "example": "2021-05-05",
             "required": false,
             "schema": {
@@ -752,7 +860,7 @@
           {
             "name": "endDate",
             "in": "query",
-            "description": "Return all prices for each interval on and before this day. Defaults to today.",
+            "description": "Return all prices for each interval on and before this day. Defaults to today. The difference between `startDate` and `endDate` must not exceed 7 days.",
             "example": "2021-05-05",
             "required": false,
             "schema": {
@@ -763,15 +871,14 @@
           {
             "name": "resolution",
             "in": "query",
-            "description": "Specify the required interval duration resolution. Valid options: 5, 30. Default: 30",
+            "description": "Specify the required interval duration resolution. Valid options: 5, 30. Default: Your billing interval length.",
             "required": false,
             "schema": {
               "type": "integer",
               "enum": [
                 5,
                 30
-              ],
-              "default": 30
+              ]
             }
           }
         ],
@@ -797,25 +904,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "oneOf": [
-                      {
-                        "$ref": "#/components/schemas/ActualInterval"
-                      },
-                      {
-                        "$ref": "#/components/schemas/CurrentInterval"
-                      },
-                      {
-                        "$ref": "#/components/schemas/ForecastInterval"
-                      }
-                    ],
-                    "discriminator": {
-                      "propertyName": "type",
-                      "mapping": {
-                        "ActualInterval": "#/components/schemas/ActualInterval",
-                        "ForecastInterval": "#/components/schemas/ForecastInterval",
-                        "CurrentInterval": "#/components/schemas/CurrentInterval"
-                      }
-                    }
+                    "$ref": "#/components/schemas/Interval"
                   }
                 }
               }
@@ -830,6 +919,9 @@
           "404": {
             "description": "Site not found"
           },
+          "422": {
+            "description": "Requested date range is greater than 7 days"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -838,11 +930,19 @@
     },
     "/sites/{siteId}/prices/current": {
       "get": {
+        "tags": [
+          "Amber"
+        ],
         "description": "Returns the current price",
         "operationId": "getCurrentPrices",
         "security": [
           {
             "apiKey": []
+          },
+          {
+            "oauth2": [
+              "prices"
+            ]
           }
         ],
         "parameters": [
@@ -851,14 +951,16 @@
             "description": "ID of the site you are fetching prices for. Can be found using the `/sites` enpoint",
             "in": "path",
             "required": true,
+            "example": "01J23BAP2SFA218BMV8A73Y9Z9",
             "schema": {
               "type": "string"
             }
           },
           {
             "name": "next",
-            "description": "Return the _next_ number of forecast intervals",
+            "description": "Return the _next_ number of forecast intervals. The total number of intervals requested must not exceed 2048.",
             "in": "query",
+            "example": 48,
             "required": false,
             "schema": {
               "type": "integer"
@@ -866,8 +968,9 @@
           },
           {
             "name": "previous",
-            "description": "Return the _previous_ number of actual intervals.",
+            "description": "Return the _previous_ number of actual intervals. The total number of intervals requested must not exceed 2048.",
             "in": "query",
+            "example": 48,
             "required": false,
             "schema": {
               "type": "integer"
@@ -876,14 +979,14 @@
           {
             "name": "resolution",
             "in": "query",
-            "description": "Specify the required interval duration resolution. Valid options: 30. Default: 30",
+            "description": "Specify the required interval duration resolution. Valid options: 5, 30. Default: Your billing interval length.",
             "required": false,
             "schema": {
               "type": "integer",
               "enum": [
+                5,
                 30
-              ],
-              "default": 30
+              ]
             }
           }
         ],
@@ -909,25 +1012,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "oneOf": [
-                      {
-                        "$ref": "#/components/schemas/ActualInterval"
-                      },
-                      {
-                        "$ref": "#/components/schemas/CurrentInterval"
-                      },
-                      {
-                        "$ref": "#/components/schemas/ForecastInterval"
-                      }
-                    ],
-                    "discriminator": {
-                      "propertyName": "type",
-                      "mapping": {
-                        "ActualInterval": "#/components/schemas/ActualInterval",
-                        "ForecastInterval": "#/components/schemas/ForecastInterval",
-                        "CurrentInterval": "#/components/schemas/CurrentInterval"
-                      }
-                    }
+                    "$ref": "#/components/schemas/Interval"
                   }
                 }
               }
@@ -942,6 +1027,9 @@
           "404": {
             "description": "Site not found"
           },
+          "422": {
+            "description": "Requested number of intervals is greater than 2048"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -950,11 +1038,19 @@
     },
     "/sites/{siteId}/usage": {
       "get": {
+        "tags": [
+          "Amber"
+        ],
         "description": "Returns all usage data between the start and end dates. The API can only return 90-days worth of data.",
         "operationId": "getUsage",
         "security": [
           {
             "apiKey": []
+          },
+          {
+            "oauth2": [
+              "usage"
+            ]
           }
         ],
         "parameters": [
@@ -963,6 +1059,7 @@
             "description": "ID of the site you are fetching usage for. Can be found using the `/sites` enpoint",
             "in": "path",
             "required": true,
+            "example": "01J23BAP2SFA218BMV8A73Y9Z9",
             "schema": {
               "type": "string"
             }
@@ -970,7 +1067,7 @@
           {
             "name": "startDate",
             "in": "query",
-            "description": "Return all usage for each interval on and after this day.",
+            "description": "Return all usage for each interval on and after this day. The difference between `startDate` and `endDate` must not exceed 7 days.",
             "example": "2021-05-05",
             "required": true,
             "schema": {
@@ -981,7 +1078,7 @@
           {
             "name": "endDate",
             "in": "query",
-            "description": "Return all usage for each interval on and before this day.",
+            "description": "Return all usage for each interval on and before this day. The difference between `startDate` and `endDate` must not exceed 7 days.",
             "example": "2021-05-05",
             "required": true,
             "schema": {
@@ -992,14 +1089,14 @@
           {
             "name": "resolution",
             "in": "query",
-            "description": "Specify the required interval duration resolution. Valid options: 30. Default: 30",
+            "description": "Deprecated. Usage will always be returned in your billing interval length. If you supply this parameter, it will be ignored.",
             "required": false,
+            "deprecated": true,
             "schema": {
               "type": "integer",
               "enum": [
                 30
-              ],
-              "default": 30
+              ]
             }
           }
         ],
@@ -1039,6 +1136,9 @@
           },
           "404": {
             "description": "Site not found"
+          },
+          "422": {
+            "description": "Requested date range is greater than 7 days"
           },
           "500": {
             "description": "Internal Server Error"

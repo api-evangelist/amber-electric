@@ -1,0 +1,13 @@
+generated: '2026-10-21'
+method: none
+source: https://github.com/amberelectric/public-api
+checked:
+- https://api.github.com/repos/amberelectric/public-api/releases (0 releases)
+- https://api.github.com/repos/amberelectric/public-api/tags (0 tags)
+- https://app.amber.com.au/developers/documentation/
+note: Amber publishes no dated changelog or release notes for its API. The contract repository has no
+  releases or tags; the last commit changing the contract was 2024-02-19 ("Adding operationIds. Fixing
+  incorrect JSON") and the last commit overall 2024-06-24 (Home Assistant blueprint docs). The live contract
+  reports info.version 2.1.0.
+current_version: 2.1.0
+entries: []

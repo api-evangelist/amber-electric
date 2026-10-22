@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/amber-electric/main/json-schema/amber-electric-usage-schema.json",
+  "title": "Usage",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/amber-electric-sites-api-openapi.yml#/components/schemas/Usage",
+  "allOf": [
+    {
+      "$ref": "#/$defs/Interval"
+    },
+    {
+      "type": "object",
+      "required": [
+        "channelIdentifier",
+        "kwh",
+        "quality",
+        "cost"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Usage"
+          ]
+        },
+        "channelIdentifier": {
+          "type": "string",
+          "description": "Meter channel identifier"
+        },
+        "kwh": {
+          "type": "number",
+          "description": "Number of kWh you consumed or generated. Generated numbers will be negative"
+        },
+        "quality": {
+          "type": "string",
+          "enum": [
+            "estimated",
+            "billable"
+          ],
+          "description": "If the metering company has had trouble contacting your meter, they may make an estimate of your usage for that period. Billable data is data that will appear on your bill."
+        },
+        "cost": {
+          "type": "number",
+          "description": "The total cost of your consumption or generation for this period - includes GST"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "ChannelType": {
+      "type": "string",
+      "description": "Meter channel type",
+      "enum": [
+        "general",
+        "controlledLoad",
+        "feedIn"
+      ]
+    },
+    "Interval": {
+      "type": "object",
+      "description": "One time interval",
+      "required": [
+        "type",
+        "duration",
+        "spotPerKwh",
+        "perKwh",
+        "date",
+        "nemTime",
+        "startTime",
+        "endTime",
+        "renewables",
+        "channelType",
+        "spikeStatus",
+        "descriptor"
+      ],
+      "properties": {
+        "duration": {
+          "type": "integer",
+          "description": "Length of the interval in minutes.",
+          "enum": [
+            5,
+            15,
+            30
+          ]
+        },
+        "spotPerKwh": {
+          "type": "number",
+          "description": "NEM spot price (c/kWh). This is the price generators get paid to generate electricity, and what drives the variable component of your perKwh price - includes GST"
+        },
+        "perKwh": {
+          "type": "number",
+          "description": "Number of cents you will pay per kilowatt-hour (c/kWh) - includes GST"
+        },
+        "date": {
+          "type": "string",
+          "description": "Date the interval belongs to (in NEM time). This may be different to the date component of nemTime, as the last interval of the day ends at 12:00 the following day. Formatted as a ISO 8601 date",
+          "format": "date"
+        },
+        "nemTime": {
+          "type": "string",
+          "description": "The interval's NEM time. This represents the time at the end of the interval UTC+10. Formatted as a ISO 8601 time",
+          "format": "date-time"
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Start time of the interval in UTC. Formatted as a ISO 8601 time",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "End time of the interval in UTC. Formatted as a ISO 8601 time",
+          "format": "date-time"
+        },
+        "renewables": {
+          "type": "number",
+          "description": "Percentage of renewables in the grid",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "channelType": {
+          "$ref": "#/$defs/ChannelType"
+        },
+        "tariffInformation": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/TariffInformation"
+            }
+          ]
+        },
+        "spikeStatus": {
+          "$ref": "#/$defs/SpikeStatus"
+        },
+        "descriptor": {
+          "$ref": "#/$defs/PriceDescriptor"
+        }
+      }
+    },
+    "PriceDescriptor": {
+      "type": "string",
+      "description": "Describes the current price. Gives you an indication of how cheap the price is in relation to the average VMO and DMO. Note: Negative is no longer used. It has been replaced with extremelyLow.",
+      "enum": [
+        "negative",
+        "extremelyLow",
+        "veryLow",
+        "low",
+        "neutral",
+        "high",
+        "spike"
+      ]
+    },
+    "SpikeStatus": {
+      "type": "string",
+      "description": "Indicates whether this interval will potentially spike, or is currently in a spike state",
+      "enum": [
+        "none",
+        "potential",
+        "spike"
+      ]
+    },
+    "TariffInformation": {
+      "type": "object",
+      "description": "Information about how your tariff affects an interval",
+      "properties": {
+        "period": {
+          "type": "string",
+          "enum": [
+            "offPeak",
+            "shoulder",
+            "solarSponge",
+            "peak"
+          ],
+          "description": "The Time of Use period that is currently active. Only available if the site in on a time of use tariff"
+        },
+        "season": {
+          "type": "string",
+          "enum": [
+            "default",
+            "summer",
+            "autumn",
+            "winter",
+            "spring",
+            "nonSummer",
+            "holiday",
+            "weekend",
+            "weekendHoliday",
+            "weekday"
+          ],
+          "description": "The Time of Use season that is currently active. Only available if the site in on a time of use tariff"
+        },
+        "block": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 2,
+          "description": "The block that is currently active. Only available in the site in on a block tariff"
+        },
+        "demandWindow": {
+          "type": "boolean",
+          "description": "Is this interval currently in the demand window? Only available if the site in on a demand tariff"
+        }
+      }
+    }
+  }
+}

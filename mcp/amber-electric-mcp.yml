@@ -106,7 +106,13 @@ third_party_servers:
     not introspected, so no tool schemas are recorded here.'
 deployment:
   mode: none
-  verified: derived
+  auth: unknown
+  verified: searched
   tools: 5
-  checked: '2026-08-12'
-  source: catalog MCP census
+  checked: '2026-10-21'
+  source: >-
+    Web search 2026-10-21 ("Amber Electric MCP server official API") found no first-party
+    server; the only Amber-electricity MCP listing is the third-party @unclick/amber-mcp
+    (https://skillselion.com/mcp/tool/io.github.malamutemayhem/amber). The preflight docs
+    scan of app.amber.com.au/developers recorded no-mcp-docs-found. Tools above are a
+    derived candidate only; no endpoint exists.

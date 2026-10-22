@@ -23,3 +23,16 @@
     detected: '2026-10-14'
   status: not-a-workflow
   arazzo: null
+- slug: amber-electric-home-assistant
+  label: Home Assistant
+  partner_name: Home Assistant
+  category: home-automation
+  use_case: Exposes Amber price and forecast data (General, Controlled Load, Feed In channels) as Home Assistant
+    sensors, built on the amberelectric Python package.
+  type: marketplace
+  marketplace: Home Assistant integrations
+  channel: partner-built
+  evidence: https://www.home-assistant.io/integrations/amberelectric/
+  source: edge
+  status: pending-partner-spec
+  arazzo: null

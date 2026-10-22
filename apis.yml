@@ -1,29 +1,23 @@
 aid: amber-electric
+
 url: https://raw.githubusercontent.com/api-evangelist/amber-electric/refs/heads/main/apis.yml
+
 name: Amber Electric
+
 kind: company
-description: >-
-  Amber Electric is an Australian electricity retailer (ABN 98623603805) that
-  sells wholesale National Electricity Market pricing straight through to
-  residential customers on a flat monthly membership, rather than marking energy
-  up, and automates home batteries, solar exports and EV charging against those
-  half-hourly prices. It sits at the retail end of the Australian energy value
-  chain, between AEMO's wholesale market and the household meter. Its API posture
-  is unusually honest and unusually split. Amber publishes a real, verbatim
-  OpenAPI 3.0.0 contract for a REST API at https://api.amber.com.au/v1 covering
-  sites, prices, forecasts and usage, but the token that unlocks it is generated
-  inside the logged-in customer app at https://app.amber.com.au/developers, so
-  the API is customer-account-required rather than self-serve — a developer who
-  is not an Amber customer cannot obtain a key. One endpoint is the exception:
-  the spec explicitly declares `security: []` on
-  GET /state/{state}/renewables/current, and that grid renewables-percentage feed
-  really does answer anonymously for NSW, VIC, QLD and SA, so open market data
-  and gated consumer data live inside the same contract. Separately, Amber is a
-  designated Consumer Data Right energy data holder that is genuinely live, not
-  merely designated: it is listed on the ACCC CDR Register with a working public
-  base URI at https://public.cdr.amber.com.au, whose CDS discovery endpoints and
-  anonymously-served OpenID Connect configuration advertise the full Consumer
-  Data Standards energy scope set behind private_key_jwt and CDR accreditation.
+
+description: 'Amber Electric is an Australian electricity retailer (ABN 98623603805) that sells wholesale National Electricity Market pricing
+  straight through to residential customers on a flat monthly membership, rather than marking energy up, and automates home batteries, solar exports
+  and EV charging against those half-hourly prices. It sits at the retail end of the Australian energy value chain, between AEMO''s wholesale
+  market and the household meter. Its API posture is unusually honest and unusually split. Amber publishes a real, verbatim OpenAPI 3.0.0 contract
+  for a REST API at https://api.amber.com.au/v1 covering sites, prices, forecasts and usage, but the token that unlocks it is generated inside
+  the logged-in customer app at https://app.amber.com.au/developers, so the API is customer-account-required rather than self-serve — a developer
+  who is not an Amber customer cannot obtain a key. One endpoint is the exception: the spec explicitly declares `security: []` on GET /state/{state}/renewables/current,
+  and that grid renewables-percentage feed really does answer anonymously for NSW, VIC, QLD and SA, so open market data and gated consumer data
+  live inside the same contract. Separately, Amber is a designated Consumer Data Right energy data holder that is genuinely live, not merely designated:
+  it is listed on the ACCC CDR Register with a working public base URI at https://public.cdr.amber.com.au, whose CDS discovery endpoints and anonymously-served
+  OpenID Connect configuration advertise the full Consumer Data Standards energy scope set behind private_key_jwt and CDR accreditation.'
+
 deliveryModel:
   model: open-core
   license: MIT
@@ -38,6 +32,7 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: unknown
   onboarding: unknown
@@ -53,7 +48,9 @@ accessModel:
   - security
   generated: '2026-09-03'
   method: derived
+
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/amber-electric.png
+
 tags:
 - Energy
 - Australia
@@ -67,9 +64,119 @@ tags:
 - DER
 - Smart Metering
 - Wholesale Pricing
+
 created: '2026-07-27'
-modified: '2026-10-06'
+
+modified: '2026-10-21'
+
 specificationVersion: '0.23'
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+
+common:
+- type: Plans
+  url: plans/amber-electric-plans-pricing.yml
+- type: Spectral
+  url: rules/amber-electric-rules.yml
+- type: JSONLD
+  url: json-ld/amber-electric-context.jsonld
+- type: Vocabulary
+  url: vocabulary/amber-electric-vocabulary.yml
+- type: Hosts
+  url: hosts/amber-electric-hosts.yml
+- type: IntegrationEdges
+  url: integrations/amber-electric-integration-edges.yml
+- type: Vendors
+  url: vendors/amber-electric-vendors.yml
+- type: GettingStarted
+  url: https://help.amber.com.au/hc/en-us/articles/360037454111-What-is-the-onboarding-process
+- type: Blog
+  url: https://www.amber.com.au/blog
+- url: https://www.amber.com.au/blog/rss.xml
+  type: BlogRSS
+- type: IssueTracker
+  url: https://github.com/amberelectric/public-api/issues
+- type: License
+  name: MIT
+  url: https://github.com/amberelectric/public-api/blob/main/LICENSE
+- type: AgenticAccess
+  url: agentic-access/amber-electric-agentic-access.yml
+- type: DomainSecurity
+  url: security/amber-electric-domain-security.yml
+- type: Authentication
+  url: authentication/amber-electric-authentication.yml
+- type: Packages
+  url: packages/amber-electric-packages.yml
+- type: SDKs
+  url: packages/amber-electric-packages.yml
+- type: WellKnown
+  url: well-known/amber-electric-well-known.yml
+- type: X-MCPServerCandidate
+  url: mcp/amber-electric-mcp.yml
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published
+    API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting
+    the artifact-type surfaces with a server that does not exist.'
+- type: Overlay
+  url: overlays/amber-electric-public-api-overlay.yaml
+- type: Conformance
+  url: conformance/amber-electric-conformance.yml
+- type: ErrorCatalog
+  url: errors/amber-electric-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/amber-electric-lifecycle.yml
+- type: Conventions
+  url: conventions/amber-electric-conventions.yml
+- type: RateLimits
+  url: rate-limits/amber-electric-rate-limits.yml
+- type: DataModel
+  url: data-model/amber-electric-data-model.yml
+- type: Examples
+  url: examples/amber-electric-examples.yml
+- type: OAuthScopes
+  url: scopes/amber-electric-scopes.yml
+- type: AgentSkill
+  name: Read live grid renewables for an Australian state
+  url: skills/amber-electric-grid-renewables.md
+- type: AgentSkill
+  name: Read current and forecast electricity prices for an Amber site
+  url: skills/amber-electric-site-prices.md
+- type: AgentSkill
+  name: Pull interval usage and cost history for an Amber site
+  url: skills/amber-electric-usage-history.md
+- type: Website
+  url: https://www.amber.com.au/
+- type: DeveloperPortal
+  url: https://app.amber.com.au/developers
+- type: Documentation
+  url: https://app.amber.com.au/developers/documentation/
+- type: APIReference
+  url: https://app.amber.com.au/developers/documentation
+- type: SourceCode
+  url: https://github.com/amberelectric/public-api
+- type: GitHubOrganization
+  url: https://github.com/amberelectric
+- type: Support
+  url: https://help.amber.com.au/hc/en-us
+- type: Community
+  url: https://github.com/amberelectric/public-api/discussions
+- type: Pricing
+  url: https://www.amber.com.au/pricing
+- type: TermsOfService
+  url: https://www.amber.com.au/terms-and-conditions/terms
+- type: PrivacyPolicy
+  url: https://www.amber.com.au/legal/privacy
+- type: SignUp
+  url: https://app.amber.com.au/signup
+- type: Login
+  url: https://app.amber.com.au/sign-in
+- type: StatusPage
+  name: SmartShift Status
+  url: https://www.amber.com.au/status
+- type: LinkedIn
+  url: https://www.linkedin.com/company/amberelectric/
+
 apis:
 - aid: amber-electric:amber-electric-cdr-energy-api
   name: Amber Electric Consumer Data Right Energy API
@@ -106,16 +213,16 @@ apis:
     url: https://www.cdr.gov.au/consumers/energy
   - type: OAuthScopes
     url: scopes/amber-electric-scopes.yml
-- aid: amber-electric:amber-electric-sites-api
-  name: Amber Electric Sites API
-  description: The Sites API from Amber Electric — 4 operation(s) for sites.
-  humanURL: https://app.amber.com.au/developers
-  baseURL: https://api.amber.com.au/v1
+- aid: amber-electric:amber-electric-amber-api
+  name: Amber Electric Amber API
+  description: The Amber API from Amber Electric — 5 operation(s) for amber.
+  humanURL: https://www.cdr.gov.au/
+  baseURL: https://public.cdr.amber.com.au/cds-au/v1
   tags:
-  - Sites
+  - Amber
   properties:
   - type: OpenAPI
-    url: openapi/amber-electric-sites-api-openapi.yml
+    url: openapi/amber-electric-amber-api-openapi.yml
   - type: Documentation
     url: https://app.amber.com.au/developers
   - type: APIReference
@@ -124,106 +231,53 @@ apis:
     url: https://github.com/amberelectric/public-api
   - type: Support
     url: https://github.com/amberelectric/public-api/discussions
-- aid: amber-electric:amber-electric-state-api
-  name: Amber Electric State API
-  description: The State API from Amber Electric — 1 operation(s) for state.
-  humanURL: https://app.amber.com.au/developers
-  baseURL: https://api.amber.com.au/v1
-  tags:
-  - States
-  tags_raw:
-  - State
-  properties:
-  - type: OpenAPI
-    url: openapi/amber-electric-state-api-openapi.yml
-  - type: Documentation
-    url: https://app.amber.com.au/developers
-  - type: APIReference
-    url: https://app.amber.com.au/developers/documentation
-  - type: SourceCode
-    url: https://github.com/amberelectric/public-api
-  - type: Support
-    url: https://github.com/amberelectric/public-api/discussions
-common:
-- url: https://www.amber.com.au/blog
-  type: Blog
-- url: https://www.amber.com.au/blog/rss.xml
-  type: BlogRSS
-- type: IssueTracker
-  url: https://github.com/amberelectric/public-api/issues
-- type: License
-  name: MIT
-  url: https://github.com/amberelectric/public-api/blob/main/LICENSE
-- type: AgenticAccess
-  url: agentic-access/amber-electric-agentic-access.yml
-- type: DomainSecurity
-  url: security/amber-electric-domain-security.yml
-- type: Authentication
-  url: authentication/amber-electric-authentication.yml
-- type: Packages
-  url: packages/amber-electric-packages.yml
-- type: SDKs
-  url: packages/amber-electric-packages.yml
-- type: WellKnown
-  url: well-known/amber-electric-well-known.yml
-- type: LLMsTxt
-  url: llms/amber-electric-llms.txt
-- type: X-MCPServerCandidate
-  url: mcp/amber-electric-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
-- type: Overlay
-  url: overlays/amber-electric-public-api-overlay.yaml
-- type: Conformance
-  url: conformance/amber-electric-conformance.yml
-- type: ErrorCatalog
-  url: errors/amber-electric-problem-types.yml
-- type: Lifecycle
-  url: lifecycle/amber-electric-lifecycle.yml
-- type: Conventions
-  url: conventions/amber-electric-conventions.yml
-- type: RateLimits
-  url: rate-limits/amber-electric-rate-limits.yml
-- type: DataModel
-  url: data-model/amber-electric-data-model.yml
-- type: Examples
-  url: examples/amber-electric-examples.yml
-- type: OAuthScopes
-  url: scopes/amber-electric-scopes.yml
-- type: AgentSkill
-  name: Read live grid renewables for an Australian state
-  url: skills/amber-electric-grid-renewables.md
-- type: AgentSkill
-  name: Read current and forecast electricity prices for an Amber site
-  url: skills/amber-electric-site-prices.md
-- type: AgentSkill
-  name: Pull interval usage and cost history for an Amber site
-  url: skills/amber-electric-usage-history.md
-- type: Website
-  url: https://amber.com.au/
-- type: DeveloperPortal
-  url: https://app.amber.com.au/developers
-- type: Documentation
-  url: https://app.amber.com.au/developers
-- type: APIReference
-  url: https://app.amber.com.au/developers/documentation
-- type: SourceCode
-  url: https://github.com/amberelectric/public-api
-- type: GitHubOrganization
-  url: https://github.com/amberelectric
-- type: Blog
-  url: https://amber.com.au/blog
-- type: Support
-  url: https://help.amber.com.au/
-- type: Community
-  url: https://github.com/amberelectric/public-api/discussions
-- type: Pricing
-  url: https://amber.com.au/pricing
-- type: TermsOfService
-  url: https://amber.com.au/terms
-- type: PrivacyPolicy
-  url: https://amber.com.au/privacy
-- type: SignUp
-  url: https://app.amber.com.au/developers
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+  - type: JSONSchema
+    url: json-schema/amber-electric-site-schema.json
+  - type: JSONSchema
+    url: json-schema/amber-electric-usage-schema.json
+  - type: JSONSchema
+    url: json-schema/amber-electric-current-interval-schema.json
+  - type: JSONSchema
+    url: json-schema/amber-electric-forecast-interval-schema.json
+  - type: JSONSchema
+    url: json-schema/amber-electric-actual-interval-schema.json
+  - type: JSONSchema
+    url: json-schema/amber-electric-forecast-renewable-schema.json
+  - type: JSONSchema
+    url: json-schema/amber-electric-current-renewable-schema.json
+  - type: JSONSchema
+    url: json-schema/amber-electric-actual-renewable-schema.json
+x-coverage:
+  state: covered
+  reason: identity-verified
+  detail: Website https://www.amber.com.au/ (title "Renewable Energy Provider | Save With Wholesale Electricity", Amber Electric wordmark) verified
+    2026-10-21; link pointers taken from the homepage footer/nav. help.amber.com.au and www.amber.com.au/status answer our crawler with a Cloudflare
+    challenge (403) but pre-flight browser fetch got 200, so treated as live. www.cdr.gov.au was unreachable (timeout) from our network, not confirmed
+    dead, left in place.
+  evidence:
+  - url: https://www.amber.com.au/
+    status: 200
+  - url: https://www.amber.com.au/terms-and-conditions/terms
+    status: 200
+  - url: https://www.amber.com.au/legal/privacy
+    status: 200
+  - url: https://www.amber.com.au/pricing
+    status: 200
+  - url: https://www.amber.com.au/blog
+    status: 200
+  - url: https://help.amber.com.au/hc/en-us
+    status: 403
+  - url: https://www.amber.com.au/status
+    status: 403
+  - url: https://github.com/amberelectric
+    status: 200
+  - url: https://app.amber.com.au/developers/documentation
+    status: 200
+  - url: https://www.cdr.gov.au/consumers/energy
+    status: 0
+x-enrichment:
+  date: '2026-10-21'
+  status: enriched
+  artifacts_added: 18
+  pass: modular-v1
+  engine: identity=anthropic,contract=anthropic,surfaces=anthropic,docs=anthropic,regulatory=anthropic

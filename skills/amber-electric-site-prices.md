@@ -1,10 +1,11 @@
 ---
-name: Read current and forecast electricity prices for an Amber site
+name: amber-electric-site-prices
+title: Read current and forecast electricity prices for an Amber site
 description: >-
   Resolve the sites on an Amber Electric account, then read the live price and
   the forecast curve for one of them so a load can be scheduled into cheap or
   negative-price intervals.
-api: openapi/amber-electric-public-api-openapi.json
+api: openapi/amber-electric-sites-api-openapi.yml
 base_url: https://api.amber.com.au/v1
 auth: bearer
 operations:

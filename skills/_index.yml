@@ -1,28 +1,34 @@
-generated: '2026-07-27'
+name: Amber Electric agent skills
+generated: '2026-10-21'
 method: generated
-source: openapi/amber-electric-public-api-openapi.json
-note: >-
-  Packaged operating instructions for the three real flows Amber's five-operation
-  API supports. Every operationId referenced was verified against the published
-  contract; no operation was invented. Amber publishes no AGENTS.md or skill
-  files of its own — searched the amberelectric GitHub organisation and the docs
-  host on 2026-07-27.
+source: openapi/amber-electric-sites-api-openapi.yml, openapi/amber-electric-state-api-openapi.yml (split
+  from openapi/_original/amber-electric-public-api-openapi.json)
+note: "Packaged operating instructions for the three real flows Amber's five-operation API supports. Every\
+  \ operationId referenced was verified against the published contract; no operation was invented. Amber\
+  \ publishes no AGENTS.md or skill files of its own \u2014 searched the amberelectric GitHub organisation\
+  \ and the docs host on 2026-07-27."
 skills:
 - file: amber-electric-grid-renewables.md
   name: Read live grid renewables for an Australian state
-  api: openapi/amber-electric-public-api-openapi.json
+  api: openapi/amber-electric-state-api-openapi.yml
   auth: none
-  operations: [getCurrentRenewables]
+  operations:
+  - getCurrentRenewables
 - file: amber-electric-site-prices.md
   name: Read current and forecast electricity prices for an Amber site
-  api: openapi/amber-electric-public-api-openapi.json
+  api: openapi/amber-electric-sites-api-openapi.yml
   auth: bearer
-  operations: [getSites, getCurrentPrices, getPrices]
+  operations:
+  - getSites
+  - getCurrentPrices
+  - getPrices
 - file: amber-electric-usage-history.md
   name: Pull interval usage and cost history for an Amber site
-  api: openapi/amber-electric-public-api-openapi.json
+  api: openapi/amber-electric-sites-api-openapi.yml
   auth: bearer
-  operations: [getSites, getUsage]
+  operations:
+  - getSites
+  - getUsage
 coverage:
   operations_total: 5
   operations_covered: 5

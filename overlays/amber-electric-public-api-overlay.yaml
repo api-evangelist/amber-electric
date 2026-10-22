@@ -2,7 +2,7 @@ overlay: 1.0.0
 info:
   title: API Evangelist enhancements for the Amber Electric Public API
   version: 1.0.0
-extends: openapi/amber-electric-public-api-openapi.json
+extends: ../openapi/_original/amber-electric-public-api-openapi.json
 x-apievangelist:
   generated: '2026-07-27'
   method: generated

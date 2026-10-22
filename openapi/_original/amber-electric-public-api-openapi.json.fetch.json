@@ -5,8 +5,8 @@
  "content_type": "application/json",
  "bytes": 36899,
  "sha256": "ce21ce84a99876092180418451eef4bd7a7e047bc38e0185128308484677e2ae",
- "fetched_at": "2026-10-04",
- "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
- "match": "equivalent",
- "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+ "fetched_at": "2026-10-21",
+ "fetched_by": "contract module (curl)",
+ "ownership": "info.contact dev@amber.com.au / Amber Electric Development Team, servers[] https://api.amber.com.au/v1, served from app.amber.com.au which www.amber.com.au links as its API docs",
+ "note": "Replaced the earlier archive (GitHub amberelectric/public-api swagger.json, info.version 1.0, 33727 bytes, last pushed 2024-06-24). The provider-hosted document loaded by https://app.amber.com.au/developers/documentation/ is info.version 2.1.0, has the same 5 operations, and adds an oauth2 authorizationCode scheme (scopes sites/prices/usage), AdvancedPrice, SiteStatus, Site.intervalLength and contact/license metadata."
 }

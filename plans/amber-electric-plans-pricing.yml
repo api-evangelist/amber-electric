@@ -1,0 +1,28 @@
+name: Amber Electric pricing
+generated: '2026-10-21'
+method: searched
+source: https://help.amber.com.au/hc/en-us/articles/360051219652-What-is-Amber-s-monthly-subscription
+audience: business-product
+pricing_basis: flat-platform
+published: true
+delivery:
+  delivery: managed
+note: 'The API carries no price of its own: the token is issued inside the customer app (app.amber.com.au/developers)
+  to Amber electricity customers, so API access comes with the retail membership. https://www.amber.com.au/pricing
+  (redirects to app.amber.com.au/pricing/) is a postcode quote wizard and shows no price; the subscription
+  is stated on the help-centre article cited as source. Electricity itself is passed through at wholesale
+  cost and is not a plan tier.'
+plan_count: 1
+plans:
+- name: Monthly subscription
+  description: Amber's monthly subscription, its only margin; wholesale energy, network, metering and
+    environmental costs are passed through at cost. Charged per NMI and pro-rated daily.
+  price: 25
+  price_text: $25/month
+  currency: AUD
+  billing_period: month
+  features:
+  - Wholesale electricity prices passed through at cost
+  - Access to the Amber developer API token from the customer app
+  limits:
+  - Charged per NMI (National Meter Identifier)

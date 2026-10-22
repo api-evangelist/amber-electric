@@ -1,0 +1,138 @@
+{
+  "@context": {
+    "@vocab": "https://amber.com.au/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "amber": "https://amber.com.au/schema#",
+    "TariffInformation": "amber:TariffInformation",
+    "period": {
+      "@id": "amber:period",
+      "@type": "xsd:string"
+    },
+    "season": {
+      "@id": "amber:season",
+      "@type": "xsd:string"
+    },
+    "block": {
+      "@id": "amber:block",
+      "@type": "xsd:decimal"
+    },
+    "demandWindow": {
+      "@id": "amber:demandWindow",
+      "@type": "xsd:boolean"
+    },
+    "ChannelType": "amber:ChannelType",
+    "PriceDescriptor": "amber:PriceDescriptor",
+    "Range": "amber:Range",
+    "min": {
+      "@id": "amber:min",
+      "@type": "xsd:decimal"
+    },
+    "max": {
+      "@id": "amber:max",
+      "@type": "xsd:decimal"
+    },
+    "SpikeStatus": "amber:SpikeStatus",
+    "Site": "amber:Site",
+    "id": {
+      "@id": "amber:id",
+      "@type": "xsd:string"
+    },
+    "nmi": {
+      "@id": "amber:nmi",
+      "@type": "xsd:string"
+    },
+    "channels": {
+      "@id": "amber:channels",
+      "@container": "@list"
+    },
+    "network": {
+      "@id": "amber:network",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "amber:status",
+      "@type": "xsd:string"
+    },
+    "activeFrom": {
+      "@id": "amber:activeFrom",
+      "@type": "xsd:string"
+    },
+    "closedOn": {
+      "@id": "amber:closedOn",
+      "@type": "xsd:string"
+    },
+    "Interval": "amber:Interval",
+    "duration": {
+      "@id": "amber:duration",
+      "@type": "xsd:integer"
+    },
+    "spotPerKwh": {
+      "@id": "amber:spotPerKwh",
+      "@type": "xsd:decimal"
+    },
+    "perKwh": {
+      "@id": "amber:perKwh",
+      "@type": "xsd:decimal"
+    },
+    "date": {
+      "@id": "amber:date",
+      "@type": "xsd:date"
+    },
+    "nemTime": {
+      "@id": "amber:nemTime",
+      "@type": "xsd:dateTime"
+    },
+    "startTime": {
+      "@id": "amber:startTime",
+      "@type": "xsd:dateTime"
+    },
+    "endTime": {
+      "@id": "amber:endTime",
+      "@type": "xsd:dateTime"
+    },
+    "renewables": {
+      "@id": "amber:renewables",
+      "@type": "xsd:decimal"
+    },
+    "channelType": {
+      "@id": "amber:channelType",
+      "@type": "@id"
+    },
+    "tariffInformation": {
+      "@id": "amber:tariffInformation"
+    },
+    "spikeStatus": {
+      "@id": "amber:spikeStatus",
+      "@type": "@id"
+    },
+    "descriptor": {
+      "@id": "amber:descriptor",
+      "@type": "@id"
+    },
+    "Channel": "amber:Channel",
+    "identifier": {
+      "@id": "amber:identifier",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "amber:type",
+      "@type": "@id"
+    },
+    "tariff": {
+      "@id": "amber:tariff",
+      "@type": "xsd:string"
+    },
+    "Renewable": "amber:Renewable",
+    "RenewableDescriptor": "amber:RenewableDescriptor"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Amber Electric API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Amber Electric's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-21) from openapi/amber-electric-sites-api-openapi.yml, openapi/amber-electric-state-api-openapi.yml.",
+  "dcterms:created": "2026-10-21",
+  "dcterms:source": [
+    "openapi/amber-electric-sites-api-openapi.yml",
+    "openapi/amber-electric-state-api-openapi.yml"
+  ]
+}

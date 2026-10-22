@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/amber-electric/main/json-schema/amber-electric-site-schema.json",
+  "title": "Site",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/amber-electric-sites-api-openapi.yml#/components/schemas/Site",
+  "type": "object",
+  "required": [
+    "id",
+    "nmi",
+    "channels",
+    "network",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique Site Identifier"
+    },
+    "nmi": {
+      "type": "string",
+      "description": "National Metering Identifier (NMI) for the site",
+      "minLength": 10,
+      "maxLength": 11
+    },
+    "channels": {
+      "type": "array",
+      "description": "List of channels that are readable from your meter",
+      "items": {
+        "$ref": "#/$defs/Channel"
+      }
+    },
+    "network": {
+      "type": "string",
+      "description": "The name of the site's network"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "closed"
+      ],
+      "description": "Site status.\n\nPending sites are still in the process of being transferred. Note: We only include sites that have correct address details. If you expect to see a site, but don't, you may need to contact [info@amber.com.au](mailto:info@amber.com.au) to check that the address is correct.\n\nActive sites are ones that we actively supply electricity to.\n\nClosed sites are old sites that we no longer supply."
+    },
+    "activeFrom": {
+      "type": "string",
+      "description": "Date the site became active. This date will be in the future for pending sites. It may also be undefined, though if it is, contact [info@amber.com.au](mailto:info@amber.com.au) - there may be an issue with your address. Formatted as a ISO 8601 date when present."
+    },
+    "closedOn": {
+      "type": "string",
+      "description": "Date the site closed. Undefined if the site is pending or active. Formatted as a ISO 8601 date when present."
+    }
+  },
+  "$defs": {
+    "Channel": {
+      "type": "object",
+      "description": "Describes a power meter channel.\n\nThe General channel provides continuous power - it's the channel all of your appliances and lights are attached to.\n\nControlled loads are only on for a limited time during the day (usually when the load on the network is low, or generation is high) - you may have your hot water system attached to this channel.\n\nThe feed in channel sends power back to the grid - you will have these types of channels if you have solar or batteries.",
+      "required": [
+        "identifier",
+        "type",
+        "tariff"
+      ],
+      "properties": {
+        "identifier": {
+          "type": "string",
+          "description": "Identifier of the channel"
+        },
+        "type": {
+          "$ref": "#/$defs/ChannelType"
+        },
+        "tariff": {
+          "type": "string",
+          "description": "The tariff code of the channel"
+        }
+      }
+    },
+    "ChannelType": {
+      "type": "string",
+      "description": "Meter channel type",
+      "enum": [
+        "general",
+        "controlledLoad",
+        "feedIn"
+      ]
+    }
+  }
+}

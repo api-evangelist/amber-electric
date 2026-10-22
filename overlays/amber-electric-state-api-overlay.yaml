@@ -1,0 +1,31 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Amber Electric Public State API
+  version: 1.0.0
+extends: openapi/amber-electric-state-api-openapi.yml
+x-apievangelist:
+  generated: '2026-10-21'
+  method: generated
+  source: >-
+    Derived from openapi/amber-electric-state-api-openapi.yml (split from Amber's
+    published https://app.amber.com.au/swagger.json) plus rate-limits/ and
+    conventions/ in this repository. The contract is never mutated.
+actions:
+- target: $.info
+  update:
+    x-access-gate: none
+    x-agent-surfaces:
+      mcp: mcp/amber-electric-mcp.yml
+      skills: skills/amber-electric-grid-renewables.md
+- target: $
+  update:
+    tags:
+    - name: State
+      description: Grid renewable-energy percentage for a National Electricity Market state (nsw, sa, qld, vic). Anonymous.
+- target: $.paths['/state/{state}/renewables/current'].get
+  update:
+    summary: Get current grid renewables for a NEM state
+    x-anonymous: true
+    x-apievangelist-note: >-
+      The only Amber operation that answers without a credential; it carries an
+      explicit `security: []` override in the published contract.

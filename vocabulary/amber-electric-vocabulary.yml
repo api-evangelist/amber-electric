@@ -1,0 +1,76 @@
+generated: '2026-10-21'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/amber-electric-sites-api-openapi.yml
+- openapi/amber-electric-state-api-openapi.yml
+vocabulary:
+  name: Amber Electric Domain Vocabulary
+  description: 'Terms declared by Amber Electric''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-21'
+  terms:
+  - term: TariffInformation
+    definition: Information about how your tariff affects an interval
+    tags:
+    - Object
+    source: openapi/amber-electric-sites-api-openapi.yml#/components/schemas/TariffInformation
+  - term: ChannelType
+    definition: Meter channel type
+    tags:
+    - Enumeration
+    source: openapi/amber-electric-sites-api-openapi.yml#/components/schemas/ChannelType
+  - term: PriceDescriptor
+    definition: 'Describes the current price. Gives you an indication of how cheap the price is in relation to the average VMO and DMO. Note:
+      Negative is no longer used. It has been replaced with extremelyLow.'
+    tags:
+    - Enumeration
+    source: openapi/amber-electric-sites-api-openapi.yml#/components/schemas/PriceDescriptor
+  - term: Range
+    definition: When prices are particularly volatile, the API may return a range of NEM spot prices (c/kWh) that are possible.
+    tags:
+    - Object
+    source: openapi/amber-electric-sites-api-openapi.yml#/components/schemas/Range
+  - term: SpikeStatus
+    definition: Indicates whether this interval will potentially spike, or is currently in a spike state
+    tags:
+    - Enumeration
+    source: openapi/amber-electric-sites-api-openapi.yml#/components/schemas/SpikeStatus
+  - term: Site
+    definition: 'Object declared by the contract with fields: id, nmi, channels, network, status, activeFrom, closedOn.'
+    tags:
+    - Object
+    source: openapi/amber-electric-sites-api-openapi.yml#/components/schemas/Site
+  - term: Interval
+    definition: One time interval
+    tags:
+    - Object
+    source: openapi/amber-electric-sites-api-openapi.yml#/components/schemas/Interval
+  - term: Channel
+    definition: Describes a power meter channel. The General channel provides continuous power - it's the channel all of your appliances and lights
+      are attached to. Controlled loads are only on for a limited time during the day (usually when the load on the network is low, or generation
+      is high) - you may have your hot water system attached to this channel. The feed in channel sends power back to the grid - you w
+    tags:
+    - Object
+    source: openapi/amber-electric-sites-api-openapi.yml#/components/schemas/Channel
+  - term: Renewable
+    definition: Renewable data
+    tags:
+    - Object
+    source: openapi/amber-electric-state-api-openapi.yml#/components/schemas/Renewable
+  - term: RenewableDescriptor
+    definition: Describes the state of renewables. Gives you an indication of how green power is right now
+    tags:
+    - Enumeration
+    source: openapi/amber-electric-state-api-openapi.yml#/components/schemas/RenewableDescriptor
+  - term: Sites
+    definition: 'Resource group in the contract; its operation GET /sites: Return all sites linked to your account'
+    tags:
+    - Resource Group
+    source: openapi/amber-electric-sites-api-openapi.yml
+  - term: State
+    definition: 'Resource group in the contract; its operation GET /state/{state}/renewables/current: Returns the current percentage of renewables
+      in the grid'
+    tags:
+    - Resource Group
+    source: openapi/amber-electric-state-api-openapi.yml

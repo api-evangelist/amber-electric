@@ -1,10 +1,11 @@
 ---
-name: Read live grid renewables for an Australian state
+name: amber-electric-grid-renewables
+title: Read live grid renewables for an Australian state
 description: >-
   Fetch the current, recent and forecast renewable-energy percentage of the
   National Electricity Market grid for NSW, VIC, QLD or SA using Amber
   Electric's one anonymous endpoint — no account, no key, no signup.
-api: openapi/amber-electric-public-api-openapi.json
+api: openapi/amber-electric-state-api-openapi.yml
 base_url: https://api.amber.com.au/v1
 auth: none
 operations:

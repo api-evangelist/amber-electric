@@ -1,0 +1,67 @@
+generated: '2026-10-21'
+method: searched
+probe: true
+source: https://www.amber.com.au/legal/privacy
+signals:
+  data_subject_request:
+    url: https://www.amber.com.au/legal/privacy
+    section: Your access to your personal information
+    channel: info@amber.com.au
+    rights_named: [access, correction, deletion, marketing opt-out, CDR data sharing with Accredited Data Recipients]
+    escalation: Complaints form https://www.amber.com.au/complaints, handled under Amber's Complaints Policy
+    evidence:
+    - source: https://www.amber.com.au/legal/privacy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        You can ask us to share with you the information we hold about you. You can do this by emailing us at
+        info@amber.com.au . If you think that we are holding inaccurate information, you can ask us to change or delete it.
+    - source: https://amber-website-documents.s3.ap-southeast-2.amazonaws.com/Amber_Electric_Consumer_Data_Right_Policy.pdf
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        You can ask us to share, correct or delete your personal information by emailing us at info@amber.com.au.
+    - source: https://amber-website-documents.s3.ap-southeast-2.amazonaws.com/Amber_Electric_Consumer_Data_Right_Policy.pdf
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        You can request that we share your energy data with ADRs of your choice.
+    note: >-
+      An email channel for access, correction and deletion requests in the Privacy Policy, restated in the
+      Consumer Data Right Policy (last updated 6 March 2025, linked from the terms hub), which also lets an eligible
+      consumer direct Amber to share energy data with accredited recipients under Australia's CDR. No response time is stated.
+  data_residency:
+    url: https://www.amber.com.au/legal/privacy
+    evidence:
+    - source: https://www.amber.com.au/legal/privacy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        From time to time it may be necessary to transfer information outside of Australia in order to process it
+        and provide our services to you (for example when storing information using cloud service providers).
+    note: >-
+      A disclosure that data can leave Australia, NOT a residency commitment. No destination countries or regions are named.
+  subprocessors:
+    url: https://www.amber.com.au/legal/privacy
+    evidence:
+    - source: https://www.amber.com.au/legal/privacy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        We may use third parties to help us deliver our service to you. Where we do, those third parties are subject
+        to the same Privacy Obligations as those that apply to us.
+    note: >-
+      Says third-party processors are used and are bound by the same obligations. No subprocessor list is published.
+  data_retention:
+    url: https://www.amber.com.au/legal/privacy
+    section: Your access to your personal information
+    evidence:
+    - source: https://www.amber.com.au/legal/privacy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        This is subject to our regulatory obligations which require us to hold certain types of information for
+        specified time periods.
+    note: >-
+      Retention is tied to unnamed regulatory requirements and limits correction and deletion. No retention periods
+      or schedule are published.
