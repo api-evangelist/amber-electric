@@ -26,3 +26,16 @@ plans:
   - Access to the Amber developer API token from the customer app
   limits:
   - Charged per NMI (National Meter Identifier)
+x-canonical:
+  generated: '2026-10-23'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - subscription
+  units: []
+  plans:
+  - name: Monthly subscription
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
