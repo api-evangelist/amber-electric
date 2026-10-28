@@ -1,4 +1,4 @@
-# Amber Electric (amber-electric)
+# Amber Electric
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,90 +64,167 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Amber Electric is an Australian electricity retailer (ABN 98623603805) that sells wholesale National Electricity Market pricing straight through to residential customers on a flat monthly membership, rather than marking energy up, and automates home batteries, solar exports and EV charging against those half-hourly prices. It sits at the retail end of the Australian energy value chain, between AEMO's wholesale market and the household meter. Its API posture is unusually honest and unusually split. Amber publishes a real, verbatim OpenAPI 3.0.0 contract for a REST API at `https://api.amber.com.au/v1` covering sites, prices, forecasts and usage, but the token that unlocks it is generated inside the logged-in customer app at https://app.amber.com.au/developers, so the API is customer-account-required rather than self-serve — a developer who is not an Amber customer cannot obtain a key. One endpoint is the exception: the spec explicitly declares `security: []` on `GET /state/{state}/renewables/current`, and that grid renewables-percentage feed really does answer anonymously for NSW, VIC, QLD and SA, so open market data and gated consumer data live inside the same contract. Separately, Amber is a designated Consumer Data Right energy data holder that is genuinely live, not merely designated: it is listed on the ACCC CDR Register with a working public base URI at `https://public.cdr.amber.com.au`, whose CDS discovery endpoints and anonymously-served OpenID Connect configuration advertise the full Consumer Data Standards energy scope set behind `private_key_jwt` and CDR accreditation.
+Amber Electric is an Australian electricity retailer (ABN 98623603805) that sells wholesale National Electricity Market pricing straight through to residential customers on a flat monthly membership, rather than marking energy up, and automates home batteries, solar exports and EV charging against those half-hourly prices. It sits at the retail end of the Australian energy value chain, between AEMO's wholesale market and the household meter. Its API posture is unusually honest and unusually split. Amber publishes a real, verbatim OpenAPI 3.0.0 contract for a REST API at https://api.amber.com.au/v1 covering sites, prices, forecasts and usage, but the token that unlocks it is generated inside the logged-in customer app at https://app.amber.com.au/developers, so the API is customer-account-required rather than self-serve — a developer who is not an Amber customer cannot obtain a key. One endpoint is the exception: the spec explicitly declares `security: []` on GET /state/{state}/renewables/current, and that grid renewables-percentage feed really does answer anonymously for NSW, VIC, QLD and SA, so open market data and gated consumer data live inside the same contract. Separately, Amber is a designated Consumer Data Right energy data holder that is genuinely live, not merely designated: it is listed on the ACCC CDR Register with a working public base URI at https://public.cdr.amber.com.au, whose CDS discovery endpoints and anonymously-served OpenID Connect configuration advertise the full Consumer Data Standards energy scope set behind private_key_jwt and CDR accreditation.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/amber-electric/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/amber-electric/refs/heads/main/apis.yml)
+**Areas:** Energy · Australia · Electricity · Utilities · Consumer Data Right · Energy Markets · Renewables · Solar · Batteries · DER · Smart Metering · Wholesale Pricing
 
-## Tags
+## Amber Electric on APIs.io
 
-- Energy
-- Australia
-- Electricity
-- Utilities
-- Consumer Data Right
-- Energy Markets
-- Renewables
-- Solar
-- Batteries
-- DER
-- Smart Metering
-- Wholesale Pricing
+Everything profiled for Amber Electric is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/amber-electric/](https://apis.io/providers/amber-electric/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (2)
 
-- **Created:** 2026-07-27
-- **Modified:** 2026-07-27
+- [Amber Electric Consumer Data Right Energy API](https://apis.io/apis/amber-electric/amber-electric-cdr-energy-api/) — Amber's Consumer Data Right energy data-holder surface, mandated by the Australian CDR regime extended from banking into energy and administered by the ACCC…
+- [Amber Electric Amber API](https://apis.io/apis/amber-electric/amber-electric-amber-api/) — The Amber API from Amber Electric — 5 operation(s) for amber.
 
-## APIs
+### Published properties
 
-### Amber Electric Public API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Amber Electric's own documented REST API, described by a verbatim OpenAPI 3.0.0 contract the company publishes in its public GitHub repository. Five read-only operations: list the sites on your account, fetch actual, current and forecast half-hourly prices for a site, fetch usage for a site, and read the current renewables percentage for a National Electricity Market state. Authentication is HTTP bearer (declared in the spec as the `apiKey` security scheme, type http / scheme bearer) and the token is generated from the Developers tab inside the logged-in Amber customer app, so four of the five operations require an active Amber account. The renewables operation carries an explicit `security: []` override and was confirmed to return 200 anonymously on 2026-07-27.
+#### MCP servers (1)
 
-- **Human URL:** [https://app.amber.com.au/developers](https://app.amber.com.au/developers)
-- **Base URL:** `https://api.amber.com.au/v1`
+Model Context Protocol servers that expose the API to agents.
 
-#### Tags
+- [amber-electric](https://apis.io/servers/amber-electric/amber-electric/)
 
-- Energy
-- Electricity
-- Pricing
-- Usage
-- Renewables
-- Australia
+#### Agentic access (1)
 
-#### Properties
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- [OpenAPI](openapi/amber-electric-public-api-openapi.json) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Documentation](https://app.amber.com.au/developers)
-- [API Reference](https://app.amber.com.au/developers/documentation)
-- [Source Code](https://github.com/amberelectric/public-api)
-- [Support](https://github.com/amberelectric/public-api/discussions)
+- [Amber Electric Agentic Access](https://apis.io/agentic-access/amber-electric/amber-electric-agentic-access/)
 
-### Amber Electric Consumer Data Right Energy API
+#### JSON Schema (8)
 
-Amber's Consumer Data Right energy data-holder surface, mandated by the Australian CDR regime extended from banking into energy and administered by the ACCC with standards set by the Data Standards Body. Amber is listed on the public CDR Register as an energy data holder brand (dataHolderBrandId `54968899-b7b5-ef11-95f6-6045bd3f1493`, ABN 98623603805, lastUpdated 2026-07-23) with the public base URI `https://public.cdr.amber.com.au`. The implementation was verified live on 2026-07-27, not merely claimed: the Consumer Data Standards discovery endpoints `/cds-au/v1/discovery/status` and `/cds-au/v1/discovery/outages` both returned 200 with conformant CDS payloads, and `/.well-known/openid-configuration` is served anonymously. Access is accredited-only — dynamic client registration at `https://secure.cdr.amber.com.au/connect/register` with `private_key_jwt` client authentication and PAR, reachable only by an accredited CDR data recipient holding a software statement assertion from the CDR Register. No general developer can call it.
+The data models the API reads and writes.
 
-- **Human URL:** [https://www.cdr.gov.au/](https://www.cdr.gov.au/)
-- **Base URL:** `https://public.cdr.amber.com.au/cds-au/v1`
+- [ActualInterval](https://apis.io/schemas/amber-electric/amber-electric-actual-interval/)
+- [ActualRenewable](https://apis.io/schemas/amber-electric/amber-electric-actual-renewable/)
+- [CurrentInterval](https://apis.io/schemas/amber-electric/amber-electric-current-interval/)
+- [CurrentRenewable](https://apis.io/schemas/amber-electric/amber-electric-current-renewable/)
+- [ForecastInterval](https://apis.io/schemas/amber-electric/amber-electric-forecast-interval/)
+- [ForecastRenewable](https://apis.io/schemas/amber-electric/amber-electric-forecast-renewable/)
+- [Site](https://apis.io/schemas/amber-electric/amber-electric-site/)
+- [Usage](https://apis.io/schemas/amber-electric/amber-electric-usage/)
 
-#### Tags
+#### JSON-LD (1)
 
-- Consumer Data Right
-- Energy
-- Open Data
-- Regulated
-- OpenID Connect
-- Australia
+Linked-data contexts for the provider's vocabulary.
 
-#### Properties
+- [Amber Electric Context](https://apis.io/jsonld/amber-electric/amber-electric-context/)
 
-- [Authentication](authentication/amber-electric-cdr-openid-configuration.json)
-- [OpenID Connect Discovery](https://public.cdr.amber.com.au/.well-known/openid-configuration)
-- [Documentation](https://consumerdatastandardsaustralia.github.io/standards/)
-- [Registry](https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary)
-- [Documentation](https://www.cdr.gov.au/consumers/energy)
+#### Collections (1)
 
-## Common Properties
+Postman and Open Collection request collections.
 
-- [Website](https://amber.com.au/)
-- [Documentation](https://app.amber.com.au/developers)
-- [GitHub Organization](https://github.com/amberelectric)
-- [Blog](https://amber.com.au/blog)
-- [Support](https://help.amber.com.au/)
-- [Privacy](https://amber.com.au/privacy)
-- [Sign Up](https://app.amber.com.au/developers)
+- [Amber Electric Public API](https://apis.io/collections/amber-electric/open-amber-electric-public-api/)
 
-## Maintainers
+#### Overlays (3)
 
-- **Kin Lane** — kin@apievangelist.com
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Amber Electric Public Api Overlay](https://apis.io/overlays/amber-electric/amber-electric-public-api-overlay/)
+- [Amber Electric Sites Api Overlay](https://apis.io/overlays/amber-electric/amber-electric-sites-api-overlay/)
+- [Amber Electric State Api Overlay](https://apis.io/overlays/amber-electric/amber-electric-state-api-overlay/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Amber Electric API Rules](https://apis.io/rules/amber-electric/amber-electric-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Amber Electric Authentication](https://apis.io/security/amber-electric/amber-electric-authentication/)
+- [Amber Electric Domain Security](https://apis.io/security/amber-electric/amber-electric-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Amber Electric Scopes](https://apis.io/scopes/amber-electric/amber-electric-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Amber Electric Plans Pricing](https://apis.io/plans/amber-electric/amber-electric-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Amber Electric Rate Limits](https://apis.io/rate-limits/amber-electric/amber-electric-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.amber.com.au/)
+- [Documentation](https://app.amber.com.au/developers/documentation/)
+- [Getting started](https://help.amber.com.au/hc/en-us/articles/360037454111-What-is-the-onboarding-process)
+- [API reference](https://app.amber.com.au/developers/documentation)
+- [Pricing](https://www.amber.com.au/pricing)
+- [Sign up](https://app.amber.com.au/signup)
+- [Support](https://help.amber.com.au/hc/en-us)
+- [Blog](https://www.amber.com.au/blog)
+- [Terms of service](https://www.amber.com.au/terms-and-conditions/terms)
+- [Privacy policy](https://www.amber.com.au/legal/privacy)
+- [GitHub](https://github.com/amberelectric)
+- [Status](https://www.amber.com.au/status)
+
+## API Evangelist rating
+
+**Kin Score 64.2** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 68.0 |
+| Contract governance | 35.6 |
+| Operational transparency | 39.5 |
+| Developer ergonomics | 66.1 |
+| Access clarity | 65.8 |
+
+**Agent readiness 44.7** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | na |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | verified |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 45.1** — Energy & Utilities
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/amber-electric/](https://apis.io/providers/amber-electric/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Amber Electric: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/amber-electric/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
